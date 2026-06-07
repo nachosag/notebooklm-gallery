@@ -1,0 +1,22 @@
+# OpenSpec Configuration
+# NotebookLM Marketplace
+
+execution_mode: auto
+artifact_store: both
+chained_pr_strategy: force-chained
+review_budget_lines: 400
+
+changes:
+  notebooklm-marketplace:
+    description: "NotebookLM Marketplace MVP — community-driven directory of shared NotebookLM notebooks"
+    status: archive
+    phases:
+      - explore
+      - proposal
+      - spec
+      - design
+      - tasks
+      - apply
+      - verify
+      - sync
+      - archive

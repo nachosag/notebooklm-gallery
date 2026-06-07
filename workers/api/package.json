@@ -1,0 +1,17 @@
+{
+  "name": "notebooklm-marketplace-api",
+  "version": "1.0.0",
+  "description": "Cloudflare Workers API for NotebookLM Marketplace",
+  "main": "src/index.js",
+  "scripts": {
+    "dev": "wrangler dev",
+    "deploy": "wrangler deploy",
+    "db:migrate": "wrangler d1 migrations apply notebooklm-marketplace"
+  },
+  "dependencies": {
+    "itty-router": "^5.0.18"
+  },
+  "devDependencies": {
+    "wrangler": "^3.0.0"
+  }
+}

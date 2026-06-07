@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Submit Notebook | NotebookLM Gallery</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=Plus+Jakarta+Sans:wght@600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            vertical-align: middle;
+        }
+        .glass-effect {
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+        }
+        .chip-transition {
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        input:focus, textarea:focus {
+            outline: none;
+            box-shadow: 0 0 0 2px rgba(0, 97, 255, 0.2);
+        }
+    </style>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "text-main": "#1E293B",
+                        "on-primary-fixed": "#00174b",
+                        "on-secondary-container": "#5c647a",
+                        "inverse-on-surface": "#eff1f3",
+                        "border-subtle": "#E2E8F0",
+                        "on-tertiary-fixed": "#390c00",
+                        "primary-fixed": "#dbe1ff",
+                        "surface-container-highest": "#e0e3e5",
+                        "secondary-fixed": "#dae2fd",
+                        "outline": "#737687",
+                        "inverse-surface": "#2d3133",
+                        "surface-container": "#eceef0",
+                        "secondary-fixed-dim": "#bec6e0",
+                        "surface-tint": "#0052dc",
+                        "surface-dim": "#d8dadc",
+                        "primary": "#004bca",
+                        "secondary": "#565e74",
+                        "on-secondary-fixed": "#131b2e",
+                        "primary-fixed-dim": "#b4c5ff",
+                        "primary-container": "#0061ff",
+                        "on-primary-fixed-variant": "#003ea8",
+                        "tertiary-container": "#c73f00",
+                        "on-background": "#191c1e",
+                        "outline-variant": "#c2c6d9",
+                        "on-error-container": "#93000a",
+                        "surface-container-high": "#e6e8ea",
+                        "surface": "#f7f9fb",
+                        "background": "#f7f9fb",
+                        "on-primary": "#ffffff",
+                        "on-tertiary-container": "#ffefeb",
+                        "success-green": "#10B981",
+                        "on-secondary": "#ffffff",
+                        "on-primary-container": "#f1f2ff",
+                        "on-surface-variant": "#424656",
+                        "text-muted": "#64748B",
+                        "tertiary": "#9d3000",
+                        "surface-container-low": "#f2f4f6",
+                        "on-secondary-fixed-variant": "#3f465c",
+                        "on-tertiary-fixed-variant": "#832700",
+                        "error": "#ba1a1a",
+                        "tertiary-fixed": "#ffdbd0",
+                        "surface-variant": "#e0e3e5",
+                        "on-error": "#ffffff",
+                        "surface-container-lowest": "#ffffff",
+                        "inverse-primary": "#b4c5ff",
+                        "error-container": "#ffdad6",
+                        "secondary-container": "#dae2fd",
+                        "surface-bright": "#f7f9fb",
+                        "surface-white": "#FFFFFF",
+                        "on-surface": "#191c1e",
+                        "on-tertiary": "#ffffff",
+                        "tertiary-fixed-dim": "#ffb59d"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "gutter": "1.5rem",
+                        "stack-sm": "0.5rem",
+                        "margin-desktop": "2rem",
+                        "margin-mobile": "1rem",
+                        "container-max": "1200px",
+                        "stack-lg": "2rem",
+                        "stack-md": "1rem"
+                    },
+                    "fontFamily": {
+                        "body-sm": ["Inter"],
+                        "label-md": ["Inter"],
+                        "body-lg": ["Inter"],
+                        "display-lg": ["Plus Jakarta Sans"],
+                        "headline-lg": ["Plus Jakarta Sans"],
+                        "label-sm": ["Inter"],
+                        "headline-sm": ["Plus Jakarta Sans"],
+                        "headline-md": ["Plus Jakarta Sans"],
+                        "body-md": ["Inter"]
+                    },
+                    "fontSize": {
+                        "body-sm": ["14px", {"lineHeight": "1.5", "fontWeight": "400"}],
+                        "label-md": ["14px", {"lineHeight": "1", "letterSpacing": "0.01em", "fontWeight": "600"}],
+                        "body-lg": ["18px", {"lineHeight": "1.6", "fontWeight": "400"}],
+                        "display-lg": ["48px", {"lineHeight": "1.1", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                        "headline-lg": ["32px", {"lineHeight": "1.2", "letterSpacing": "-0.01em", "fontWeight": "700"}],
+                        "label-sm": ["12px", {"lineHeight": "1", "fontWeight": "500"}],
+                        "headline-sm": ["18px", {"lineHeight": "1.4", "fontWeight": "600"}],
+                        "headline-md": ["24px", {"lineHeight": "1.3", "fontWeight": "600"}],
+                        "body-md": ["16px", {"lineHeight": "1.5", "fontWeight": "400"}]
+                    }
+                },
+            },
+        }
+    </script>
+</head>
+<body class="bg-surface text-text-main font-body-md">
+<!-- TopNavBar -->
+<header class="fixed top-0 w-full z-50 bg-surface/80 dark:bg-surface-container/80 backdrop-blur-md border-b border-border-subtle dark:border-outline-variant shadow-sm">
+<div class="flex justify-between items-center px-gutter py-4 max-w-container-max mx-auto">
+<div class="flex items-center gap-6">
+<span class="font-headline-md text-headline-md font-bold text-text-main dark:text-inverse-on-surface cursor-pointer" onclick="window.location.reload()">NotebookLM Gallery</span>
+<nav class="hidden md:flex gap-6">
+<a class="font-body-md text-body-md text-text-muted dark:text-on-surface-variant hover:text-primary transition-colors duration-200" href="#">Discover</a>
+<a class="font-body-md text-body-md text-text-muted dark:text-on-surface-variant hover:text-primary transition-colors duration-200" href="#">Trending</a>
+<a class="font-body-md text-body-md text-text-muted dark:text-on-surface-variant hover:text-primary transition-colors duration-200" href="#">Recent</a>
+</nav>
+</div>
+<button class="bg-primary-container text-on-primary-container px-6 py-2.5 rounded-lg font-label-md text-label-md active:opacity-80 transition-opacity hover:shadow-md">
+                Submit Notebook
+            </button>
+</div>
+</header>
+<!-- Main Content Canvas -->
+<main class="pt-32 pb-20 px-gutter min-h-screen">
+<div class="max-w-[640px] mx-auto">
+<!-- Header Section -->
+<div class="mb-stack-lg text-center" id="formHeader">
+<h1 class="font-headline-lg text-headline-lg mb-2">Share Your Wisdom</h1>
+<p class="font-body-md text-body-md text-text-muted">Fill out the form below to showcase your curated NotebookLM to the community.</p>
+</div>
+<!-- Success State (Hidden by default) -->
+<div class="hidden bg-surface-white border border-success-green/30 rounded-xl p-10 shadow-lg text-center flex flex-col items-center gap-6 animate-in fade-in zoom-in duration-300" id="successState">
+<div class="w-16 h-16 bg-success-green/10 text-success-green rounded-full flex items-center justify-center">
+<span class="material-symbols-outlined text-4xl" data-icon="check_circle">check_circle</span>
+</div>
+<div>
+<h2 class="font-headline-md text-headline-md mb-2">¡Publicado!</h2>
+<p class="font-body-md text-text-muted">Tu notebook ha sido publicado exitosamente.</p>
+</div>
+<div class="flex flex-col gap-3 w-full">
+<a class="w-full bg-primary text-on-primary py-3 rounded-lg font-label-md text-center hover:opacity-90 transition-opacity" href="#">Ver mi notebook</a>
+<button class="w-full text-primary font-label-md hover:underline" onclick="window.location.reload()">Subir otro notebook</button>
+</div>
+</div>
+<!-- Submission Form Card -->
+<form class="bg-surface-white border border-border-subtle rounded-xl p-8 shadow-sm flex flex-col gap-stack-md" id="submissionForm">
+<!-- Title Field -->
+<div class="flex flex-col gap-2">
+<label class="font-label-md text-label-md text-on-surface-variant" for="title">Notebook Title <span class="text-error">*</span></label>
+<input class="w-full bg-surface-white border border-outline-variant rounded-lg p-3 font-body-md text-body-md focus:border-primary transition-all" id="title" placeholder="e.g., Quantum Physics Study Guide" required="" type="text"/>
+<span class="hidden text-error font-label-sm text-label-sm" id="titleError">Please provide a descriptive title.</span>
+</div>
+<!-- Notebook Link Field -->
+<div class="flex flex-col gap-2">
+<label class="font-label-md text-label-md text-on-surface-variant" for="link">Notebook Link <span class="text-error">*</span></label>
+<div class="relative">
+<span class="absolute left-3 top-1/2 -translate-y-1/2 material-symbols-outlined text-text-muted" data-icon="link">link</span>
+<input class="w-full bg-surface-white border border-outline-variant rounded-lg p-3 pl-10 font-body-md text-body-md focus:border-primary transition-all" id="link" placeholder="notebooklm.google.com/..." required="" type="url"/>
+</div>
+<p class="font-label-sm text-label-sm text-text-muted">Must be a valid notebooklm.google.com link.</p>
+<span class="hidden text-error font-label-sm text-label-sm" id="linkError">Only NotebookLM links are allowed.</span>
+</div>
+<!-- Description Field -->
+<div class="flex flex-col gap-2">
+<label class="font-label-md text-label-md text-on-surface-variant" for="description">Description <span class="text-error">*</span></label>
+<textarea class="w-full bg-surface-white border border-outline-variant rounded-lg p-3 font-body-md text-body-md focus:border-primary transition-all resize-none" id="description" placeholder="What is this notebook about? How should others use it?" required="" rows="4"></textarea>
+<span class="hidden text-error font-label-sm text-label-sm" id="descriptionError">Description is required.</span>
+</div>
+<!-- Author/Alias Field -->
+<div class="flex flex-col gap-2">
+<label class="font-label-md text-label-md text-on-surface-variant" for="author">Author or Alias (Optional)</label>
+<input class="w-full bg-surface-white border border-outline-variant rounded-lg p-3 font-body-md text-body-md focus:border-primary transition-all" id="author" placeholder="Your name or handle" type="text"/>
+</div>
+<!-- Preview Image Upload -->
+<div class="flex flex-col gap-2">
+<label class="font-label-md text-label-md text-on-surface-variant">Preview Image (Optional)</label>
+<div class="border-2 border-dashed border-outline-variant rounded-xl p-8 flex flex-col items-center justify-center gap-2 hover:bg-surface-container-low transition-colors cursor-pointer group" id="dropzone">
+<span class="material-symbols-outlined text-text-muted group-hover:text-primary text-4xl" data-icon="cloud_upload">cloud_upload</span>
+<p class="font-body-md text-body-md text-text-muted">Drag and drop or click to upload</p>
+<p class="font-label-sm text-label-sm text-outline">PNG, JPG up to 5MB (16:9 recommended)</p>
+<input accept="image/*" class="hidden" id="imageInput" type="file"/>
+</div>
+<div class="hidden relative rounded-lg overflow-hidden border border-border-subtle aspect-video" id="imagePreview">
+<img alt="Preview" class="w-full h-auto object-cover" id="previewImg" src=""/>
+<button class="absolute top-2 right-2 bg-inverse-surface/80 text-on-primary-container p-1 rounded-full hover:bg-inverse-surface" id="removeImg" type="button">
+<span class="material-symbols-outlined text-sm" data-icon="close">close</span>
+</button>
+</div>
+</div>
+<!-- Categories (Multi-select Chips) -->
+<div class="flex flex-col gap-2">
+<label class="font-label-md text-label-md text-on-surface-variant">Categories</label>
+<div class="flex flex-wrap gap-2">
+<button class="category-chip px-4 py-1.5 rounded-full border border-border-subtle bg-surface-container-low text-text-muted font-label-md text-label-md chip-transition hover:border-primary hover:text-primary" data-category="Educación" type="button">Educación</button>
+<button class="category-chip px-4 py-1.5 rounded-full border border-border-subtle bg-surface-container-low text-text-muted font-label-md text-label-md chip-transition hover:border-primary hover:text-primary" data-category="Programación" type="button">Programación</button>
+<button class="category-chip px-4 py-1.5 rounded-full border border-border-subtle bg-surface-container-low text-text-muted font-label-md text-label-md chip-transition hover:border-primary hover:text-primary" data-category="Negocios" type="button">Negocios</button>
+<button class="category-chip px-4 py-1.5 rounded-full border border-border-subtle bg-surface-container-low text-text-muted font-label-md text-label-md chip-transition hover:border-primary hover:text-primary" data-category="Historia" type="button">Historia</button>
+<button class="category-chip px-4 py-1.5 rounded-full border border-border-subtle bg-surface-container-low text-text-muted font-label-md text-label-md chip-transition hover:border-primary hover:text-primary" data-category="Ciencia" type="button">Ciencia</button>
+<button class="category-chip px-4 py-1.5 rounded-full border border-border-subtle bg-surface-container-low text-text-muted font-label-md text-label-md chip-transition hover:border-primary hover:text-primary" data-category="Creativo" type="button">Creativo</button>
+<button class="category-chip px-4 py-1.5 rounded-full border border-border-subtle bg-surface-container-low text-text-muted font-label-md text-label-md chip-transition hover:border-primary hover:text-primary" data-category="Productividad" type="button">Productividad</button>
+<button class="category-chip px-4 py-1.5 rounded-full border border-border-subtle bg-surface-container-low text-text-muted font-label-md text-label-md chip-transition hover:border-primary hover:text-primary" data-category="Otro" type="button">Otro</button>
+</div>
+</div>
+<!-- Custom Tags -->
+<div class="flex flex-col gap-2">
+<label class="font-label-md text-label-md text-on-surface-variant" for="tags">Tags</label>
+<div class="flex flex-wrap gap-2 p-2 border border-outline-variant rounded-lg bg-surface-white focus-within:border-primary transition-all" id="tagContainer">
+<input class="border-none bg-transparent p-1 focus:ring-0 font-body-md text-body-md flex-1 min-w-[120px]" id="tagInput" placeholder="Add a tag..." type="text"/>
+</div>
+<p class="font-label-sm text-label-sm text-text-muted">Press Enter to add tags.</p>
+</div>
+<!-- Publish Button -->
+<div class="mt-stack-sm">
+<button class="w-full bg-primary-container text-on-primary-container py-4 rounded-xl font-headline-sm text-headline-sm hover:opacity-90 active:scale-[0.98] transition-all shadow-md flex items-center justify-center gap-2" id="publishBtn" type="submit">
+                        Publish Notebook
+                        <span class="material-symbols-outlined" data-icon="send">send</span>
+</button>
+</div>
+</form>
+</div>
+</main>
+<!-- Footer -->
+<footer class="w-full py-stack-lg mt-stack-lg bg-surface-container-lowest dark:bg-inverse-surface border-t border-border-subtle dark:border-outline">
+<div class="flex flex-col md:flex-row justify-between items-center px-gutter max-w-container-max mx-auto">
+<div class="flex flex-col items-center md:items-start gap-1">
+<span class="font-label-md text-label-md font-bold text-text-main">NotebookLM Community Gallery</span>
+<span class="font-body-sm text-body-sm text-text-muted dark:text-surface-variant">© 2024 NotebookLM Community Gallery</span>
+</div>
+<div class="flex gap-6 mt-4 md:mt-0">
+<a class="font-body-sm text-body-sm text-text-muted dark:text-surface-variant hover:text-text-main dark:hover:text-surface-bright transition-colors" href="#">Privacy Policy</a>
+<a class="font-body-sm text-body-sm text-text-muted dark:text-surface-variant hover:text-text-main dark:hover:text-surface-bright transition-colors" href="#">Terms of Service</a>
+<a class="font-body-sm text-body-sm text-text-muted dark:text-surface-variant hover:text-text-main dark:hover:text-surface-bright transition-colors" href="#">Contact Support</a>
+<a class="font-body-sm text-body-sm text-text-muted dark:text-surface-variant hover:text-text-main dark:hover:text-surface-bright transition-colors" href="#">About</a>
+</div>
+</div>
+</footer>
+<script>
+        // Multi-select Categories Logic
+        const chips = document.querySelectorAll('.category-chip');
+        chips.forEach(chip => {
+            chip.addEventListener('click', () => {
+                const isActive = chip.classList.contains('bg-primary-container');
+                if (isActive) {
+                    chip.classList.remove('bg-primary-container', 'text-on-primary-container', 'border-primary');
+                    chip.classList.add('bg-surface-container-low', 'text-text-muted', 'border-border-subtle');
+                } else {
+                    chip.classList.add('bg-primary-container', 'text-on-primary-container', 'border-primary');
+                    chip.classList.remove('bg-surface-container-low', 'text-text-muted', 'border-border-subtle');
+                }
+            });
+        });
+
+        // Tags Input Logic
+        const tagInput = document.getElementById('tagInput');
+        const tagContainer = document.getElementById('tagContainer');
+        tagInput.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter' && tagInput.value.trim() !== '') {
+                e.preventDefault();
+                const tagText = tagInput.value.trim();
+                const tagElement = document.createElement('div');
+                tagElement.className = 'flex items-center gap-1 bg-surface-container-high text-on-secondary-container px-3 py-1 rounded-full font-label-sm text-label-sm';
+                tagElement.innerHTML = `
+                    <span>${tagText}</span>
+                    <button type="button" class="hover:text-error flex items-center">
+                        <span class="material-symbols-outlined text-[14px]" data-icon="close">close</span>
+                    </button>
+                `;
+                tagElement.querySelector('button').addEventListener('click', () => tagElement.remove());
+                tagContainer.insertBefore(tagElement, tagInput);
+                tagInput.value = '';
+            }
+        });
+
+        // Image Preview Logic
+        const dropzone = document.getElementById('dropzone');
+        const imageInput = document.getElementById('imageInput');
+        const imagePreview = document.getElementById('imagePreview');
+        const previewImg = document.getElementById('previewImg');
+        const removeImg = document.getElementById('removeImg');
+
+        dropzone.addEventListener('click', () => imageInput.click());
+        imageInput.addEventListener('change', (e) => {
+            const file = e.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = (event) => {
+                    previewImg.src = event.target.result;
+                    dropzone.classList.add('hidden');
+                    imagePreview.classList.remove('hidden');
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+        removeImg.addEventListener('click', () => {
+            imageInput.value = '';
+            imagePreview.classList.add('hidden');
+            dropzone.classList.remove('hidden');
+        });
+
+        // Form Validation Logic
+        const form = document.getElementById('submissionForm');
+        form.addEventListener('submit', (e) => {
+            e.preventDefault();
+            let isValid = true;
+            
+            const linkInput = document.getElementById('link');
+            const linkError = document.getElementById('linkError');
+            const titleInput = document.getElementById('title');
+            const titleError = document.getElementById('titleError');
+            const descriptionInput = document.getElementById('description');
+            const descriptionError = document.getElementById('descriptionError');
+
+            // Domain validation
+            if (!linkInput.value.includes('notebooklm.google.com')) {
+                linkError.classList.remove('hidden');
+                linkInput.classList.add('border-error');
+                isValid = false;
+            } else {
+                linkError.classList.add('hidden');
+                linkInput.classList.remove('border-error');
+            }
+
+            // Title validation
+            if (!titleInput.value.trim()) {
+                titleError.classList.remove('hidden');
+                titleInput.classList.add('border-error');
+                isValid = false;
+            } else {
+                titleError.classList.add('hidden');
+                titleInput.classList.remove('border-error');
+            }
+
+            // Description validation
+            if (!descriptionInput.value.trim()) {
+                descriptionError.classList.remove('hidden');
+                descriptionInput.classList.add('border-error');
+                isValid = false;
+            } else {
+                descriptionError.classList.add('hidden');
+                descriptionInput.classList.remove('border-error');
+            }
+
+            if (isValid) {
+                const btn = document.getElementById('publishBtn');
+                btn.innerHTML = `<span class="material-symbols-outlined animate-spin" data-icon="progress_activity">progress_activity</span> Publishing...`;
+                btn.disabled = true;
+                
+                // Simulate server response
+                setTimeout(() => {
+                    // Switch to success state
+                    document.getElementById('formHeader').classList.add('hidden');
+                    form.classList.add('hidden');
+                    document.getElementById('successState').classList.remove('hidden');
+                }, 1500);
+            }
+        });
+    </script>
+</body></html>

@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>404 - Page Not Found | NotebookLM Gallery</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@600;700;800&amp;family=Inter:wght@400;500;600&amp;display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+      rel="stylesheet"
+    />
+    <link href="/css/style.css" rel="stylesheet" />
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              "text-main": "#1E293B",
+              surface: "#f7f9fb",
+              primary: "#004bca",
+              "on-primary": "#ffffff",
+              "text-muted": "#64748B",
+              "border-subtle": "#E2E8F0",
+            },
+          },
+        },
+      };
+    </script>
+  </head>
+  <body
+    class="bg-surface text-text-main font-body-md flex items-center justify-center min-h-screen p-4"
+  >
+    <div class="text-center max-w-md">
+      <div
+        class="w-20 h-20 bg-primary-fixed rounded-full flex items-center justify-center mx-auto mb-6"
+      >
+        <span class="material-symbols-outlined text-4xl text-primary"
+          >search_off</span
+        >
+      </div>
+      <h1 class="font-display-lg text-6xl text-primary font-bold mb-2">404</h1>
+      <p class="font-headline-md text-headline-md text-text-main mb-2">
+        Page not found
+      </p>
+      <p class="font-body-md text-body-md text-text-muted mb-8">
+        The page you're looking for doesn't exist or has been moved.
+      </p>
+      <a
+        class="inline-flex items-center gap-2 bg-primary text-on-primary font-label-md text-label-md px-6 py-3 rounded-lg hover:shadow-lg transition-all"
+        href="/"
+      >
+        <span class="material-symbols-outlined">arrow_back</span>
+        Back to Discover
+      </a>
+    </div>
+  </body>
+</html>

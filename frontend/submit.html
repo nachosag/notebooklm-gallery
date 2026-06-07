@@ -1,0 +1,448 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>Submit Notebook | NotebookLM Gallery</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=Plus+Jakarta+Sans:wght@600;700;800&amp;display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+      rel="stylesheet"
+    />
+    <link href="/css/style.css" rel="stylesheet" />
+    <script>
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "text-main": "#1E293B",
+              "on-primary-fixed": "#00174b",
+              "on-secondary-container": "#5c647a",
+              "inverse-on-surface": "#eff1f3",
+              "border-subtle": "#E2E8F0",
+              "on-tertiary-fixed": "#390c00",
+              "primary-fixed": "#dbe1ff",
+              "surface-container-highest": "#e0e3e5",
+              "secondary-fixed": "#dae2fd",
+              outline: "#737687",
+              "inverse-surface": "#2d3133",
+              "surface-container": "#eceef0",
+              "secondary-fixed-dim": "#bec6e0",
+              "surface-tint": "#0052dc",
+              "surface-dim": "#d8dadc",
+              primary: "#004bca",
+              secondary: "#565e74",
+              "on-secondary-fixed": "#131b2e",
+              "primary-fixed-dim": "#b4c5ff",
+              "primary-container": "#0061ff",
+              "on-primary-fixed-variant": "#003ea8",
+              "tertiary-container": "#c73f00",
+              "on-background": "#191c1e",
+              "outline-variant": "#c2c6d9",
+              "on-error-container": "#93000a",
+              "surface-container-high": "#e6e8ea",
+              surface: "#f7f9fb",
+              background: "#f7f9fb",
+              "on-primary": "#ffffff",
+              "on-tertiary-container": "#ffefeb",
+              "success-green": "#10B981",
+              "on-secondary": "#ffffff",
+              "on-primary-container": "#f1f2ff",
+              "on-surface-variant": "#424656",
+              "text-muted": "#64748B",
+              tertiary: "#9d3000",
+              "surface-container-low": "#f2f4f6",
+              "on-secondary-fixed-variant": "#3f465c",
+              "on-tertiary-fixed-variant": "#832700",
+              error: "#ba1a1a",
+              "tertiary-fixed": "#ffdbd0",
+              "surface-variant": "#e0e3e5",
+              "on-error": "#ffffff",
+              "surface-container-lowest": "#ffffff",
+              "inverse-primary": "#b4c5ff",
+              "error-container": "#ffdad6",
+              "secondary-container": "#dae2fd",
+              "surface-bright": "#f7f9fb",
+              "surface-white": "#FFFFFF",
+              "on-surface": "#191c1e",
+              "on-tertiary": "#ffffff",
+              "tertiary-fixed-dim": "#ffb59d",
+            },
+            borderRadius: {
+              DEFAULT: "0.25rem",
+              lg: "0.5rem",
+              xl: "0.75rem",
+              full: "9999px",
+            },
+            spacing: {
+              gutter: "1.5rem",
+              "stack-sm": "0.5rem",
+              "margin-desktop": "2rem",
+              "margin-mobile": "1rem",
+              "container-max": "1200px",
+              "stack-lg": "2rem",
+              "stack-md": "1rem",
+            },
+            fontFamily: {
+              "body-sm": ["Inter"],
+              "label-md": ["Inter"],
+              "body-lg": ["Inter"],
+              "display-lg": ["Plus Jakarta Sans"],
+              "headline-lg": ["Plus Jakarta Sans"],
+              "label-sm": ["Inter"],
+              "headline-sm": ["Plus Jakarta Sans"],
+              "headline-md": ["Plus Jakarta Sans"],
+              "body-md": ["Inter"],
+            },
+            fontSize: {
+              "body-sm": ["14px", { lineHeight: "1.5", fontWeight: "400" }],
+              "label-md": [
+                "14px",
+                { lineHeight: "1", letterSpacing: "0.01em", fontWeight: "600" },
+              ],
+              "body-lg": ["18px", { lineHeight: "1.6", fontWeight: "400" }],
+              "display-lg": [
+                "48px",
+                {
+                  lineHeight: "1.1",
+                  letterSpacing: "-0.02em",
+                  fontWeight: "700",
+                },
+              ],
+              "headline-lg": [
+                "32px",
+                {
+                  lineHeight: "1.2",
+                  letterSpacing: "-0.01em",
+                  fontWeight: "700",
+                },
+              ],
+              "label-sm": ["12px", { lineHeight: "1", fontWeight: "500" }],
+              "headline-sm": ["18px", { lineHeight: "1.4", fontWeight: "600" }],
+              "headline-md": ["24px", { lineHeight: "1.3", fontWeight: "600" }],
+              "body-md": ["16px", { lineHeight: "1.5", fontWeight: "400" }],
+            },
+          },
+        },
+      };
+    </script>
+    <style>
+      .chip-transition {
+        transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+      }
+      input:focus,
+      textarea:focus {
+        outline: none;
+        box-shadow: 0 0 0 2px rgba(0, 97, 255, 0.2);
+      }
+    </style>
+  </head>
+  <body class="bg-surface text-text-main font-body-md">
+    <!-- TopNavBar -->
+    <header
+      class="fixed top-0 w-full z-50 bg-surface/80 backdrop-blur-md border-b border-border-subtle shadow-sm"
+    >
+      <div
+        class="flex justify-between items-center px-gutter py-4 max-w-container-max mx-auto"
+      >
+        <div class="flex items-center gap-6">
+          <a
+            class="font-headline-md text-headline-md font-bold text-text-main"
+            href="/"
+            >NotebookLM Gallery</a
+          >
+          <nav class="hidden md:flex gap-6">
+            <a
+              class="font-body-md text-body-md text-text-muted hover:text-primary transition-colors"
+              href="/"
+              >Discover</a
+            >
+            <a
+              class="font-body-md text-body-md text-text-muted hover:text-primary transition-colors"
+              href="/?sort=popular"
+              >Trending</a
+            >
+            <a
+              class="font-body-md text-body-md text-text-muted hover:text-primary transition-colors"
+              href="/?sort=recent"
+              >Recent</a
+            >
+          </nav>
+        </div>
+        <a
+          class="bg-primary-container text-on-primary-container px-6 py-2.5 rounded-lg font-label-md text-label-md hover:shadow-md transition-all"
+          href="/submit"
+          >Submit Notebook</a
+        >
+      </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="pt-32 pb-20 px-gutter min-h-screen">
+      <div class="max-w-[640px] mx-auto">
+        <!-- Header -->
+        <div class="mb-stack-lg text-center" id="formHeader">
+          <h1 class="font-headline-lg text-headline-lg mb-2">
+            Share Your Wisdom
+          </h1>
+          <p class="font-body-md text-body-md text-text-muted">
+            Fill out the form below to showcase your curated NotebookLM to the
+            community.
+          </p>
+        </div>
+
+        <!-- Success State -->
+        <div
+          class="hidden bg-surface-white border border-success-green/30 rounded-xl p-10 shadow-lg text-center flex flex-col items-center gap-6"
+          id="successState"
+        >
+          <div
+            class="w-16 h-16 bg-success-green/10 text-success-green rounded-full flex items-center justify-center"
+          >
+            <span class="material-symbols-outlined text-4xl">check_circle</span>
+          </div>
+          <div>
+            <h2 class="font-headline-md text-headline-md mb-2">Published!</h2>
+            <p class="font-body-md text-text-muted">
+              Your notebook has been published successfully.
+            </p>
+          </div>
+          <div class="flex flex-col gap-3 w-full">
+            <a
+              id="successLink"
+              class="w-full bg-primary text-on-primary py-3 rounded-lg font-label-md text-center hover:opacity-90 transition-opacity"
+              href="#"
+              >View my notebook</a
+            >
+            <button
+              class="w-full text-primary font-label-md hover:underline"
+              onclick="window.location.reload()"
+            >
+              Submit another notebook
+            </button>
+          </div>
+        </div>
+
+        <!-- Submission Form -->
+        <form
+          class="bg-surface-white border border-border-subtle rounded-xl p-8 shadow-sm flex flex-col gap-stack-md"
+          id="submissionForm"
+        >
+          <!-- Title -->
+          <div class="flex flex-col gap-2">
+            <label
+              class="font-label-md text-label-md text-on-surface-variant"
+              for="title"
+              >Notebook Title <span class="text-error">*</span></label
+            >
+            <input
+              class="w-full bg-surface-white border border-outline-variant rounded-lg p-3 font-body-md text-body-md focus:border-primary transition-all"
+              id="title"
+              placeholder="e.g., Quantum Physics Study Guide"
+              required
+              type="text"
+            />
+            <span
+              class="hidden text-error font-label-sm text-label-sm"
+              id="titleError"
+              >Title is required (3-120 characters).</span
+            >
+          </div>
+
+          <!-- Notebook Link -->
+          <div class="flex flex-col gap-2">
+            <label
+              class="font-label-md text-label-md text-on-surface-variant"
+              for="link"
+              >Notebook Link <span class="text-error">*</span></label
+            >
+            <div class="relative">
+              <span
+                class="absolute left-3 top-1/2 -translate-y-1/2 material-symbols-outlined text-text-muted"
+                >link</span
+              >
+              <input
+                class="w-full bg-surface-white border border-outline-variant rounded-lg p-3 pl-10 font-body-md text-body-md focus:border-primary transition-all"
+                id="link"
+                placeholder="notebooklm.google.com/..."
+                required
+                type="url"
+              />
+            </div>
+            <p class="font-label-sm text-label-sm text-text-muted">
+              Must be a valid notebooklm.google.com link.
+            </p>
+            <span
+              class="hidden text-error font-label-sm text-label-sm"
+              id="linkError"
+              >Only NotebookLM links are allowed.</span
+            >
+          </div>
+
+          <!-- Description -->
+          <div class="flex flex-col gap-2">
+            <label
+              class="font-label-md text-label-md text-on-surface-variant"
+              for="description"
+              >Description <span class="text-error">*</span></label
+            >
+            <textarea
+              class="w-full bg-surface-white border border-outline-variant rounded-lg p-3 font-body-md text-body-md focus:border-primary transition-all resize-none"
+              id="description"
+              placeholder="What is this notebook about? How should others use it?"
+              required
+              rows="4"
+            ></textarea>
+            <span
+              class="hidden text-error font-label-sm text-label-sm"
+              id="descriptionError"
+              >Description is required (20-1000 characters).</span
+            >
+          </div>
+
+          <!-- Preview Image -->
+          <div class="flex flex-col gap-2">
+            <label class="font-label-md text-label-md text-on-surface-variant"
+              >Preview Image (Optional)</label
+            >
+            <div
+              class="border-2 border-dashed border-outline-variant rounded-xl p-8 flex flex-col items-center justify-center gap-2 hover:bg-surface-container-low transition-colors cursor-pointer group"
+              id="dropzone"
+            >
+              <span
+                class="material-symbols-outlined text-text-muted group-hover:text-primary text-4xl"
+                >cloud_upload</span
+              >
+              <p class="font-body-md text-body-md text-text-muted">
+                Drag and drop or click to upload
+              </p>
+              <p class="font-label-sm text-label-sm text-outline">
+                PNG, JPG up to 5MB (16:9 recommended)
+              </p>
+              <input
+                accept="image/*"
+                class="hidden"
+                id="imageInput"
+                type="file"
+              />
+            </div>
+            <div
+              class="hidden relative rounded-lg overflow-hidden border border-border-subtle aspect-video"
+              id="imagePreview"
+            >
+              <img
+                alt="Preview"
+                class="w-full h-auto object-cover"
+                id="previewImg"
+                src=""
+              />
+              <button
+                class="absolute top-2 right-2 bg-inverse-surface/80 text-on-primary-container p-1 rounded-full hover:bg-inverse-surface"
+                id="removeImg"
+                type="button"
+              >
+                <span class="material-symbols-outlined text-sm">close</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- Categories -->
+          <div class="flex flex-col gap-2">
+            <label class="font-label-md text-label-md text-on-surface-variant"
+              >Categories <span class="text-error">*</span></label
+            >
+            <div class="flex flex-wrap gap-2" id="categoryChips"></div>
+            <span
+              class="hidden text-error font-label-sm text-label-sm"
+              id="categoriesError"
+              >Select at least one category.</span
+            >
+          </div>
+
+          <!-- Tags -->
+          <div class="flex flex-col gap-2">
+            <label
+              class="font-label-md text-label-md text-on-surface-variant"
+              for="tags"
+              >Tags</label
+            >
+            <div
+              class="flex flex-wrap gap-2 p-2 border border-outline-variant rounded-lg bg-surface-white focus-within:border-primary transition-all"
+              id="tagContainer"
+            >
+              <input
+                class="border-none bg-transparent p-1 focus:ring-0 font-body-md text-body-md flex-1 min-w-[120px]"
+                id="tagInput"
+                placeholder="Add a tag..."
+                type="text"
+              />
+            </div>
+            <p class="font-label-sm text-label-sm text-text-muted">
+              Press Enter to add tags.
+            </p>
+          </div>
+
+          <!-- Publish Button -->
+          <div class="mt-stack-sm">
+            <button
+              class="w-full bg-primary-container text-on-primary-container py-4 rounded-xl font-headline-sm text-headline-sm hover:opacity-90 active:scale-[0.98] transition-all shadow-md flex items-center justify-center gap-2"
+              id="publishBtn"
+              type="submit"
+            >
+              Publish Notebook
+              <span class="material-symbols-outlined">send</span>
+            </button>
+          </div>
+        </form>
+      </div>
+    </main>
+
+    <!-- Footer -->
+    <footer
+      class="w-full py-stack-lg mt-stack-lg bg-surface-container-lowest border-t border-border-subtle"
+    >
+      <div
+        class="flex flex-col md:flex-row justify-between items-center px-gutter max-w-container-max mx-auto"
+      >
+        <div class="flex flex-col items-center md:items-start gap-1">
+          <span class="font-label-md text-label-md font-bold text-text-main"
+            >NotebookLM Community Gallery</span
+          >
+          <span class="font-body-sm text-body-sm text-text-muted"
+            >© 2026 NotebookLM Community Gallery</span
+          >
+        </div>
+        <div class="flex gap-6 mt-4 md:mt-0">
+          <a
+            class="font-body-sm text-body-sm text-text-muted hover:text-text-main transition-colors"
+            href="#"
+            >Privacy Policy</a
+          >
+          <a
+            class="font-body-sm text-body-sm text-text-muted hover:text-text-main transition-colors"
+            href="#"
+            >Terms of Service</a
+          >
+          <a
+            class="font-body-sm text-body-sm text-text-muted hover:text-text-main transition-colors"
+            href="#"
+            >Contact Support</a
+          >
+          <a
+            class="font-body-sm text-body-sm text-text-muted hover:text-text-main transition-colors"
+            href="#"
+            >About</a
+          >
+        </div>
+      </div>
+    </footer>
+
+    <script src="/js/config.js"></script>
+    <script src="/js/submit.js"></script>
+  </body>
+</html>
