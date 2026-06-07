@@ -14,12 +14,15 @@ jobs:
         with:
           node-version: 20
       - name: Install dependencies
-        run: cd workers/api && npm ci
+        run: cd workers/api && npm install
       - name: Deploy to Cloudflare Workers
         uses: cloudflare/wrangler-action@v3
         with:
           apiToken: ${{ secrets.CF_API_TOKEN }}
+          accountId: ${{ secrets.CF_ACCOUNT_ID }}
           workingDirectory: workers/api
+          secrets: |
+            TURNSTILE_SECRET
           command: deploy
 
   deploy-frontend:
@@ -32,4 +35,5 @@ jobs:
         uses: cloudflare/wrangler-action@v3
         with:
           apiToken: ${{ secrets.CF_API_TOKEN }}
+          accountId: ${{ secrets.CF_ACCOUNT_ID }}
           command: pages deploy frontend/ --project-name=notebooklm-gallery

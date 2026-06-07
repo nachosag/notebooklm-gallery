@@ -12,7 +12,7 @@ binding = "PREVIEW_IMAGES"
 bucket_name = "notebooklm-marketplace-previews"
 
 [env.production]
-vars = { ENVIRONMENT = "production" }
+vars = { ENVIRONMENT = "production", R2_PUBLIC_URL = "" }
 account_id = "18dc6f95f068dd5cfa95520d3f08760a"
 
 [env.production.d1_databases]
