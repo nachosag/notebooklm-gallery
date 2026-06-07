@@ -4,6 +4,7 @@
 
 export async function verifyTurnstile(token, env) {
 	if (!token) return { success: false };
+	if (!env.TURNSTILE_SECRET) return { success: true }; // dev mode: skip verification
 
 	const formData = new FormData();
 	formData.append("secret", env.TURNSTILE_SECRET);
