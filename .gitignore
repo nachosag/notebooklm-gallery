@@ -26,3 +26,7 @@ npm-debug.log*
 
 # Empty dir placeholders
 .gitkeep
+
+.dev.vars*
+!.dev.vars.example
+!.env.example
