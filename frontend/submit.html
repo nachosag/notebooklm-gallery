@@ -264,12 +264,19 @@
               placeholder="e.g., Quantum Physics Study Guide"
               required
               type="text"
+              maxlength="120"
             />
-            <span
-              class="hidden text-error font-label-sm text-label-sm"
-              id="titleError"
-              >Title is required (3-120 characters).</span
-            >
+            <div class="flex justify-between items-center">
+              <span
+                class="hidden text-error font-label-sm text-label-sm"
+                id="titleError"
+                >Title is required (3-120 characters).</span
+              >
+              <p
+                class="font-label-sm text-label-sm text-text-muted ml-auto"
+                id="titleCharCount"
+              >0 / 120</p>
+            </div>
           </div>
 
           <!-- Notebook Link -->
@@ -315,12 +322,19 @@
               placeholder="What is this notebook about? How should others use it?"
               required
               rows="4"
+              maxlength="1000"
             ></textarea>
-            <span
-              class="hidden text-error font-label-sm text-label-sm"
-              id="descriptionError"
-              >Description is required (20-1000 characters).</span
-            >
+            <div class="flex justify-between items-center">
+              <span
+                class="hidden text-error font-label-sm text-label-sm"
+                id="descriptionError"
+                >Description is required (20-1000 characters).</span
+              >
+              <p
+                class="font-label-sm text-label-sm text-text-muted ml-auto"
+                id="descriptionCharCount"
+              >0 / 1000</p>
+            </div>
           </div>
 
           <!-- Preview Image -->

@@ -172,6 +172,20 @@ document.addEventListener("DOMContentLoaded", () => {
 		imageInput.dispatchEvent(new Event("change"));
 	});
 
+	// Character counters
+	const titleInput = document.getElementById("title");
+	const titleCharCount = document.getElementById("titleCharCount");
+	const descriptionInput = document.getElementById("description");
+	const descriptionCharCount = document.getElementById("descriptionCharCount");
+
+	function updateCharCount(input, el, max) {
+		const len = input.value.length;
+		el.textContent = `${len} / ${max}`;
+	}
+
+	titleInput.addEventListener("input", () => updateCharCount(titleInput, titleCharCount, 120));
+	descriptionInput.addEventListener("input", () => updateCharCount(descriptionInput, descriptionCharCount, 1000));
+
 	// Show error on field
 	function showError(inputId, errorId, message) {
 		const input = document.getElementById(inputId);
