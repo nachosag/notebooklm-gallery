@@ -30,7 +30,20 @@ export function validateNotebook(data) {
 		errors.description = "Description must be between 20 and 1000 characters";
 	}
 
-	if (!data.share_url || !data.share_url.includes("notebooklm.google.com")) {
+	if (
+		!data.share_url ||
+		(() => {
+			try {
+				const parsed = new URL(data.share_url);
+				return (
+					parsed.protocol !== "https:" ||
+					parsed.hostname !== "notebooklm.google.com"
+				);
+			} catch {
+				return true;
+			}
+		})()
+	) {
 		errors.share_url =
 			"Must be a valid NotebookLM link (notebooklm.google.com)";
 	}

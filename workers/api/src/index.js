@@ -1,5 +1,5 @@
 import { Router } from "itty-router";
-import { handleCors, addCors, corsHeaders } from "./middleware/cors.js";
+import { handleCors, addCors } from "./middleware/cors.js";
 
 import { handleSubmit } from "./handlers/submit.js";
 import {
@@ -48,7 +48,7 @@ router.all(
 			}),
 			{
 				status: 404,
-				headers: { "Content-Type": "application/json", ...corsHeaders },
+				headers: { "Content-Type": "application/json" },
 			},
 		),
 );
@@ -59,6 +59,6 @@ export default {
 		if (corsPreflight) return corsPreflight;
 
 		const response = await router.handle(request, env, ctx);
-		return addCors(response);
+		return addCors(response, request);
 	},
 };

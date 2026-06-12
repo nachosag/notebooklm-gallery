@@ -61,17 +61,38 @@ document.addEventListener("DOMContentLoaded", () => {
 	});
 
 	// Tags input
+	const tagsError = document.getElementById("tagsError");
+
 	tagInput.addEventListener("keydown", (e) => {
 		if (e.key === "Enter" && tagInput.value.trim() !== "") {
 			e.preventDefault();
-			const tagText = tagInput.value.trim().slice(0, 30);
+			const raw = tagInput.value.trim();
+			if (raw.length < 2) {
+				showError("tagInput", "tagsError", "Tags must be at least 2 characters");
+				return;
+			}
+			const existingTags = tagContainer.querySelectorAll("div:not(#tagInput)");
+			if (existingTags.length >= 10) {
+				showError("tagInput", "tagsError", "Maximum 10 tags allowed");
+				return;
+			}
+			clearError("tagInput", "tagsError");
+			const tagText = raw.slice(0, 30);
 			const tagElement = document.createElement("div");
 			tagElement.className =
 				"flex items-center gap-1 bg-surface-container-high text-on-secondary-container px-3 py-1 rounded-full font-label-sm text-label-sm";
-			tagElement.innerHTML = `<span>${tagText}</span><button type="button" class="hover:text-error flex items-center"><span class="material-symbols-outlined text-[14px]">close</span></button>`;
-			tagElement
-				.querySelector("button")
-				.addEventListener("click", () => tagElement.remove());
+			const span = document.createElement("span");
+			span.textContent = tagText;
+			tagElement.appendChild(span);
+			const removeBtn = document.createElement("button");
+			removeBtn.type = "button";
+			removeBtn.className = "hover:text-error flex items-center";
+			const closeIcon = document.createElement("span");
+			closeIcon.className = "material-symbols-outlined text-[14px]";
+			closeIcon.textContent = "close";
+			removeBtn.appendChild(closeIcon);
+			removeBtn.addEventListener("click", () => tagElement.remove());
+			tagElement.appendChild(removeBtn);
 			tagContainer.insertBefore(tagElement, tagInput);
 			tagInput.value = "";
 		}
@@ -79,9 +100,32 @@ document.addEventListener("DOMContentLoaded", () => {
 
 	// Image upload
 	dropzone.addEventListener("click", () => imageInput.click());
+	dropzone.addEventListener("keydown", (e) => {
+		if (e.key === "Enter" || e.key === " ") {
+			e.preventDefault();
+			imageInput.click();
+		}
+	});
+	const imageError = document.getElementById("imageError");
+	const ALLOWED_IMAGE_TYPES = ["image/png", "image/jpeg", "image/webp"];
+	const MAX_IMAGE_SIZE = 5 * 1024 * 1024;
+
 	imageInput.addEventListener("change", () => {
 		const file = imageInput.files[0];
 		if (!file) return;
+		if (!ALLOWED_IMAGE_TYPES.includes(file.type)) {
+			imageError.textContent = "Image must be PNG, JPEG, or WebP";
+			imageError.classList.remove("hidden");
+			imageInput.value = "";
+			return;
+		}
+		if (file.size > MAX_IMAGE_SIZE) {
+			imageError.textContent = "Image must be under 5 MB";
+			imageError.classList.remove("hidden");
+			imageInput.value = "";
+			return;
+		}
+		imageError.classList.add("hidden");
 		const reader = new FileReader();
 		reader.onload = (e) => {
 			previewImg.src = e.target.result;
@@ -152,7 +196,14 @@ document.addEventListener("DOMContentLoaded", () => {
 
 		// Validate link
 		const link = document.getElementById("link").value.trim();
-		if (!link.includes("notebooklm.google.com")) {
+		let validLink = false;
+		try {
+			const parsed = new URL(link);
+			validLink = parsed.protocol === "https:" && parsed.hostname === "notebooklm.google.com";
+		} catch {
+			validLink = false;
+		}
+		if (!validLink) {
 			showError(
 				"link",
 				"linkError",

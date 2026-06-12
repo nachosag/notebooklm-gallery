@@ -331,6 +331,9 @@
             <div
               class="border-2 border-dashed border-outline-variant rounded-xl p-8 flex flex-col items-center justify-center gap-2 hover:bg-surface-container-low transition-colors cursor-pointer group"
               id="dropzone"
+              tabindex="0"
+              role="button"
+              aria-label="Upload preview image"
             >
               <span
                 class="material-symbols-outlined text-text-muted group-hover:text-primary text-4xl"
@@ -349,6 +352,10 @@
                 type="file"
               />
             </div>
+            <span
+              class="hidden text-error font-label-sm text-label-sm"
+              id="imageError"
+            ></span>
             <div
               class="hidden relative rounded-lg overflow-hidden border border-border-subtle aspect-video"
               id="imagePreview"
@@ -403,6 +410,10 @@
             <p class="font-label-sm text-label-sm text-text-muted">
               Press Enter to add tags.
             </p>
+            <span
+              class="hidden text-error font-label-sm text-label-sm"
+              id="tagsError"
+            ></span>
           </div>
 
           <!-- Turnstile -->

@@ -8,12 +8,6 @@ import { verifyTurnstile } from "../middleware/turnstile.js";
 import { checkRateLimit } from "../middleware/ratelimit.js";
 import { hashIp } from "../utils/ip.js";
 
-const corsHeaders = {
-	"Access-Control-Allow-Origin": "*",
-	"Access-Control-Allow-Methods": "POST, OPTIONS",
-	"Access-Control-Allow-Headers": "Content-Type, CF-Turnstile-Token",
-};
-
 // Allowed image MIME types for preview upload
 const ALLOWED_IMAGE_TYPES = new Set(["image/png", "image/jpeg", "image/webp"]);
 const MAX_IMAGE_SIZE = 5 * 1024 * 1024; // 5 MB
@@ -23,7 +17,7 @@ function error(status, code, message, fields) {
 	if (fields) body.error.fields = fields;
 	return new Response(JSON.stringify(body), {
 		status,
-		headers: { "Content-Type": "application/json", ...corsHeaders },
+		headers: { "Content-Type": "application/json" },
 	});
 }
 
@@ -231,7 +225,7 @@ export async function handleSubmit(request, env, _ctx) {
 		// --- 9. Return 201 ---
 		return new Response(JSON.stringify({ id, success: true }), {
 			status: 201,
-			headers: { "Content-Type": "application/json", ...corsHeaders },
+			headers: { "Content-Type": "application/json" },
 		});
 	} catch (err) {
 		console.error("Submit handler error:", err);

@@ -1,3 +1,9 @@
+function escapeHtml(str) {
+	if (!str) return '';
+	const map = { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;', '`': '&#96;' };
+	return String(str).replace(/[&<>"'`]/g, c => map[c]);
+}
+
 // NotebookLM Gallery - Detail Page
 document.addEventListener("DOMContentLoaded", () => {
 	const notebookId = window.location.pathname.split("/").pop();
@@ -43,13 +49,13 @@ document.addEventListener("DOMContentLoaded", () => {
 			CONFIG.CATEGORIES.find((c) => c.slug === primaryCat)?.icon || "category";
 
 		const thumbContent = nb.preview_url
-			? `<img class="w-full h-full object-cover" src="${nb.preview_url}" alt="${nb.title}">`
+			? `<img class="w-full h-full object-cover" src="${escapeHtml(nb.preview_url)}" alt="${escapeHtml(nb.title)}">`
 			: `<div class="w-full h-full thumbnail-fallback flex items-center justify-center"><span class="material-symbols-outlined text-6xl text-white/60">${catIcon}</span></div>`;
 
 		const tagsHTML = (nb.tags || [])
 			.map(
 				(t) =>
-					`<span class="px-4 py-1.5 bg-surface-container-low border border-outline-variant hover:border-primary hover:text-primary transition-all rounded-full font-label-sm text-label-sm text-on-secondary-container">${t}</span>`,
+					`<span class="px-4 py-1.5 bg-surface-container-low border border-outline-variant hover:border-primary hover:text-primary transition-all rounded-full font-label-sm text-label-sm text-on-secondary-container">${escapeHtml(t)}</span>`,
 			)
 			.join("");
 
@@ -85,12 +91,12 @@ document.addEventListener("DOMContentLoaded", () => {
 
                     <div class="space-y-stack-md">
                         <div class="flex items-center gap-4">
-                            <span class="font-label-sm text-label-sm px-3 py-1 rounded-full bg-secondary-container text-on-secondary-container">${catLabel}</span>
+                            <span class="font-label-sm text-label-sm px-3 py-1 rounded-full bg-secondary-container text-on-secondary-container">${escapeHtml(catLabel)}</span>
                             ${dateStr ? `<span class="font-body-sm text-body-sm text-text-muted">Published ${dateStr}</span>` : ""}
                         </div>
-                        <h1 class="font-display-lg text-display-lg text-text-main tracking-tight">${nb.title}</h1>
+                        <h1 class="font-display-lg text-display-lg text-text-main tracking-tight">${escapeHtml(nb.title)}</h1>
                         <div>
-                            <p class="font-body-lg text-body-lg text-on-surface-variant leading-relaxed">${nb.description}</p>
+                            <p class="font-body-lg text-body-lg text-on-surface-variant leading-relaxed">${escapeHtml(nb.description)}</p>
                         </div>
                     </div>
 
@@ -120,7 +126,7 @@ document.addEventListener("DOMContentLoaded", () => {
                                 <span class="font-body-sm text-body-sm text-text-muted">likes</span>
                             </div>
 
-                            <a class="flex items-center justify-center gap-2 w-full py-4 bg-primary text-on-primary font-label-md text-label-md rounded-lg hover:shadow-lg active:scale-[0.98] transition-all" href="${nb.share_url}" target="_blank" rel="noopener">
+                            <a class="flex items-center justify-center gap-2 w-full py-4 bg-primary text-on-primary font-label-md text-label-md rounded-lg hover:shadow-lg active:scale-[0.98] transition-all" href="${escapeHtml(nb.share_url)}" target="_blank" rel="noopener">
                                 <span class="material-symbols-outlined">open_in_new</span>
                                 Open in NotebookLM
                             </a>

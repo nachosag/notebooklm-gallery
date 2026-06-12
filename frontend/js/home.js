@@ -1,3 +1,9 @@
+function escapeHtml(str) {
+	if (!str) return '';
+	const map = { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;', '`': '&#96;' };
+	return String(str).replace(/[&<>"'`]/g, c => map[c]);
+}
+
 // NotebookLM Gallery - Discover Page
 const state = {
 	page: 1,
@@ -42,7 +48,7 @@ function createCardHTML(notebook) {
 
 	// Preview: use image if available, else fallback gradient
 	const thumbContent = notebook.preview_url
-		? `<img class="w-full h-full object-cover" src="${notebook.preview_url}" alt="${notebook.title}" />`
+		? `<img class="w-full h-full object-cover" src="${escapeHtml(notebook.preview_url)}" alt="${escapeHtml(notebook.title)}" />`
 		: `<div class="w-full h-full thumbnail-fallback flex items-center justify-center"><span class="material-symbols-outlined text-4xl text-white/60">${catIcon}</span></div>`;
 
 	const likeIcon = `favorite`; // Material Symbol for heart
@@ -52,12 +58,12 @@ function createCardHTML(notebook) {
             <div class="aspect-video relative overflow-hidden bg-surface-container-high">
                 ${thumbContent}
                 <div class="absolute bottom-3 left-3 flex gap-2">
-                    <span class="bg-primary/90 text-white font-label-sm text-label-sm px-3 py-1 rounded-full backdrop-blur-sm">${catLabel}</span>
+                    <span class="bg-primary/90 text-white font-label-sm text-label-sm px-3 py-1 rounded-full backdrop-blur-sm">${escapeHtml(catLabel)}</span>
                 </div>
             </div>
             <div class="p-5 space-y-2">
-                <h3 class="font-headline-sm text-headline-sm text-text-main line-clamp-2">${notebook.title}</h3>
-                <p class="font-body-sm text-body-sm text-text-muted line-clamp-2 leading-relaxed">${notebook.description}</p>
+                <h3 class="font-headline-sm text-headline-sm text-text-main line-clamp-2">${escapeHtml(notebook.title)}</h3>
+                <p class="font-body-sm text-body-sm text-text-muted line-clamp-2 leading-relaxed">${escapeHtml(notebook.description)}</p>
                 <div class="pt-2 flex items-center gap-1.5 text-text-muted">
                     <span class="material-symbols-outlined text-lg heart-icon ${notebook.liked ? "liked" : ""}" data-liked="${notebook.liked || false}" onclick="event.preventDefault(); toggleLike('${notebook.id}', this)">${likeIcon}</span>
                     <span class="font-label-sm text-label-sm like-count">${notebook.likes || 0}</span>
