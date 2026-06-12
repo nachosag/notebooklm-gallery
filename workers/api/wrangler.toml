@@ -11,11 +11,9 @@ database_id = "045bb108-427e-44a6-bbd8-4e0e8341bdd4"
 binding = "PREVIEW_IMAGES"
 bucket_name = "notebooklm-marketplace-previews"
 
-# TODO: Create KV namespace and uncomment
-# npx wrangler kv namespace create SITEMAP_CACHE
-# [[kv_namespaces]]
-# binding = "SITEMAP_CACHE"
-# id = "<paste-id-here>"
+[[kv_namespaces]]
+binding = "SITEMAP_CACHE"
+id = "f6c20286deed48d3bf2aac6ae2cdbc17"
 
 [env.production]
 vars = { ENVIRONMENT = "production", R2_PUBLIC_URL = "" }
@@ -30,7 +28,6 @@ database_id = "045bb108-427e-44a6-bbd8-4e0e8341bdd4"
 binding = "PREVIEW_IMAGES"
 bucket_name = "notebooklm-marketplace-previews"
 
-# TODO: Uncomment after creating KV namespace
-# [[env.production.kv_namespaces]]
-# binding = "SITEMAP_CACHE"
-# id = "<paste-id-here>"
+[[env.production.kv_namespaces]]
+binding = "SITEMAP_CACHE"
+id = "f6c20286deed48d3bf2aac6ae2cdbc17"
