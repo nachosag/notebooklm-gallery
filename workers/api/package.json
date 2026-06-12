@@ -6,12 +6,16 @@
   "scripts": {
     "dev": "wrangler dev",
     "deploy": "wrangler deploy",
-    "db:migrate": "wrangler d1 migrations apply notebooklm-marketplace"
+    "db:migrate": "wrangler d1 migrations apply notebooklm-marketplace",
+    "test": "vitest run",
+    "test:watch": "vitest"
   },
   "dependencies": {
     "itty-router": "^5.0.18"
   },
   "devDependencies": {
+    "@cloudflare/vitest-pool-workers": "^0.16.15",
+    "vitest": "^4.1.8",
     "wrangler": "^3.0.0"
   }
 }
