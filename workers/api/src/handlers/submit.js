@@ -127,65 +127,6 @@ async function uploadBase64Image(dataUrl, env) {
 	return `/api/images/${key}`;
 }
 
-/**
- * POST /api/notebooks/:id/image — Upload/replace image for an existing notebook.
- */
-export async function handleUpdateImage(request, env, id) {
-	try {
-		// Check notebook exists
-		const existing = await env.DB.prepare(
-			"SELECT id FROM notebooks WHERE id = ?1",
-		)
-			.bind(id)
-			.first();
-		if (!existing) {
-			return error(404, "NOT_FOUND", "Notebook not found");
-		}
-
-		const { json } = await parseBody(request);
-
-		if (
-			!json.preview_image ||
-			typeof json.preview_image !== "string" ||
-			!json.preview_image.startsWith("data:")
-		) {
-			return error(
-				400,
-				"VALIDATION_ERROR",
-				"preview_image must be a base64 data URL",
-			);
-		}
-
-		let previewUrl;
-		try {
-			previewUrl = await uploadBase64Image(json.preview_image, env);
-		} catch (err) {
-			if (err.code === "VALIDATION_ERROR") {
-				return error(400, "VALIDATION_ERROR", err.message);
-			}
-			throw err;
-		}
-
-		await env.DB.prepare(
-			"UPDATE notebooks SET preview_url = ?1 WHERE id = ?2",
-		)
-			.bind(previewUrl, id)
-			.run();
-
-		return new Response(JSON.stringify({ id, preview_url: previewUrl, success: true }), {
-			status: 200,
-			headers: { "Content-Type": "application/json", ...corsHeaders },
-		});
-	} catch (err) {
-		console.error("Update image error:", err);
-		return error(
-			500,
-			"INTERNAL_ERROR",
-			"Something went wrong. Please try again.",
-		);
-	}
-}
-
 export async function handleSubmit(request, env, _ctx) {
 	try {
 		// --- 1. Parse body ---

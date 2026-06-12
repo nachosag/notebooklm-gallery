@@ -1,7 +1,7 @@
 import { Router } from "itty-router";
 import { handleCors, addCors, corsHeaders } from "./middleware/cors.js";
 
-import { handleSubmit, handleUpdateImage } from "./handlers/submit.js";
+import { handleSubmit } from "./handlers/submit.js";
 import {
 	handleList,
 	handleDetail,
@@ -33,9 +33,6 @@ router.get("/api/notebooks/:id", (req, env) =>
 router.post("/api/notebooks", handleSubmit);
 router.post("/api/notebooks/:id/like", (req, env) =>
 	handleLike(req, env, req.params.id),
-);
-router.post("/api/notebooks/:id/image", (req, env) =>
-	handleUpdateImage(req, env, req.params.id),
 );
 router.get("/api/categories", (req, env) => handleCategories(req, env));
 router.get("/api/tags/trending", (req, env) => handleTrendingTags(req, env));
