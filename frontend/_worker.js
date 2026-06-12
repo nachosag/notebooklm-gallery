@@ -360,7 +360,63 @@ async function handleSubmit(request, env) {
 			await env.PREVIEW_IMAGES.put(key, await file.arrayBuffer(), {
 				httpMetadata: { contentType: file.type },
 			});
-			previewUrl = `${env.R2_PUBLIC_URL || ""}/${key}`;
+			previewUrl = `/api/images/${key}`;
+		} else if (
+			jsonData.preview_image &&
+			typeof jsonData.preview_image === "string" &&
+			jsonData.preview_image.startsWith("data:")
+		) {
+			const ALLOWED = new Set(["image/png", "image/jpeg", "image/webp"]);
+			const matches = jsonData.preview_image.match(
+				/^data:(image\/(png|jpeg|webp));base64,(.+)$/,
+			);
+			if (!matches)
+				return json(
+					{
+						error: {
+							code: "VALIDATION_ERROR",
+							message: "Invalid image format",
+						},
+					},
+					400,
+				);
+
+			const mimeType = matches[1];
+			const ext = mimeType === "image/jpeg" ? "jpg" : mimeType.split("/")[1];
+			const base64Data = matches[3];
+
+			if (!ALLOWED.has(mimeType))
+				return json(
+					{
+						error: {
+							code: "VALIDATION_ERROR",
+							message: "Image must be PNG, JPEG, or WebP",
+						},
+					},
+					400,
+				);
+
+			const binaryStr = atob(base64Data);
+			const bytes = new Uint8Array(binaryStr.length);
+			for (let i = 0; i < binaryStr.length; i++)
+				bytes[i] = binaryStr.charCodeAt(i);
+
+			if (bytes.length > 5 * 1024 * 1024)
+				return json(
+					{
+						error: {
+							code: "VALIDATION_ERROR",
+							message: "Image must be under 5 MB",
+						},
+					},
+					400,
+				);
+
+			const key = `preview-images/${crypto.randomUUID()}.${ext}`;
+			await env.PREVIEW_IMAGES.put(key, bytes, {
+				httpMetadata: { contentType: mimeType },
+			});
+			previewUrl = `/api/images/${key}`;
 		}
 
 		const id = crypto.randomUUID();
@@ -499,17 +555,29 @@ async function handleTrendingTags(env) {
 	});
 }
 
+async function handleImage(_req, env, m) {
+	const key = m[1];
+	const obj = await env.PREVIEW_IMAGES.get(key);
+	if (!obj) {
+		return new Response("Not found", { status: 404 });
+	}
+	const headers = new Headers();
+	obj.writeHttpMetadata(headers);
+	headers.set("Cache-Control", "public, max-age=31536000, immutable");
+	return new Response(obj.body, { headers });
+}
+
 // === Route matching ===
 const routes = [
 	{
 		method: "GET",
 		pattern: /^\/api\/notebooks$/,
-		handler: async (req, env, m) => handleList(new URL(req.url), env),
+		handler: async (req, env, _m) => handleList(new URL(req.url), env),
 	},
 	{
 		method: "GET",
 		pattern: /^\/api\/notebooks\/([a-f0-9-]+)$/,
-		handler: async (req, env, m) => handleDetail(env, m[1]),
+		handler: async (_req, env, m) => handleDetail(env, m[1]),
 	},
 	{
 		method: "POST",
@@ -531,6 +599,11 @@ const routes = [
 		pattern: /^\/api\/tags\/trending$/,
 		handler: async (_req, env) => handleTrendingTags(env),
 	},
+	{
+		method: "GET",
+		pattern: /^\/api\/images\/(.+)$/,
+		handler: handleImage,
+	},
 ];
 
 function matchRoute(method, pathname) {
@@ -543,8 +616,28 @@ function matchRoute(method, pathname) {
 }
 
 // === Entry point ===
-async function handleRequest(request, env, ctx) {
+async function handleRequest(request, env, _ctx) {
 	const url = new URL(request.url);
+
+	// Serve notebook.html for /notebook/* (client-side routing loads detail from API)
+	if (url.pathname.startsWith("/notebook/")) {
+		// ASSETS redirects /notebook.html → /notebook, so we follow the redirect
+		const res = await env.ASSETS.fetch(
+			new Request(new URL("/notebook.html", request.url)),
+		);
+		if (
+			res.status === 301 ||
+			res.status === 302 ||
+			res.status === 307 ||
+			res.status === 308
+		) {
+			const location = res.headers.get("location");
+			if (location) {
+				return env.ASSETS.fetch(new Request(new URL(location, request.url)));
+			}
+		}
+		return res;
+	}
 
 	// Only handle /api/* — fall through to ASSETS for everything else
 	if (!url.pathname.startsWith("/api/")) {

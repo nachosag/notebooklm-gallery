@@ -186,6 +186,13 @@ document.addEventListener("DOMContentLoaded", () => {
 
 		if (!isValid) return;
 
+		// Get Turnstile token
+		const turnstileToken = turnstile?.getResponse();
+		if (!turnstileToken) {
+			alert("Please complete the security check before publishing.");
+			return;
+		}
+
 		// Submit
 		publishBtn.disabled = true;
 		publishBtn.innerHTML = `<span class="material-symbols-outlined animate-spin">progress_activity</span> Publishing...`;
@@ -211,7 +218,10 @@ document.addEventListener("DOMContentLoaded", () => {
 
 			const res = await fetch(`${CONFIG.API_BASE}/api/notebooks`, {
 				method: "POST",
-				headers: { "Content-Type": "application/json" },
+				headers: {
+					"Content-Type": "application/json",
+					"CF-Turnstile-Token": turnstileToken,
+				},
 				body: JSON.stringify(body),
 			});
 

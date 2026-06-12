@@ -10,12 +10,20 @@ import {
 } from "./handlers/notebooks.js";
 import { handleLike } from "./handlers/likes.js";
 
-const router = Router();
+async function handleImage(req, env) {
+	const url = new URL(req.url);
+	const key = url.pathname.replace("/api/images/", "");
+	const obj = await env.PREVIEW_IMAGES.get(key);
+	if (!obj) {
+		return new Response("Not found", { status: 404 });
+	}
+	const headers = new Headers();
+	obj.writeHttpMetadata(headers);
+	headers.set("Cache-Control", "public, max-age=31536000, immutable");
+	return new Response(obj.body, { headers });
+}
 
-const ok = (data) =>
-	new Response(JSON.stringify(data), {
-		headers: { "Content-Type": "application/json", ...corsHeaders },
-	});
+const router = Router();
 
 // API Routes
 router.get("/api/notebooks", (req, env) => handleList(req, env));
@@ -28,6 +36,7 @@ router.post("/api/notebooks/:id/like", (req, env) =>
 );
 router.get("/api/categories", (req, env) => handleCategories(req, env));
 router.get("/api/tags/trending", (req, env) => handleTrendingTags(req, env));
+router.get("/api/images/*", (req, env) => handleImage(req, env));
 
 // 404
 router.all(

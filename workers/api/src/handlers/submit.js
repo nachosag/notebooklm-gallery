@@ -83,10 +83,51 @@ async function uploadImage(file, env) {
 		httpMetadata: { contentType: file.type },
 	});
 
-	return `${env.R2_PUBLIC_URL || ""}/${key}`;
+	return `/api/images/${key}`;
 }
 
-export async function handleSubmit(request, env, ctx) {
+/**
+ * Upload base64-encoded image from JSON body to R2, return public URL.
+ */
+async function uploadBase64Image(dataUrl, env) {
+	const matches = dataUrl.match(/^data:(image\/(png|jpeg|webp));base64,(.+)$/);
+	if (!matches) {
+		throw {
+			code: "VALIDATION_ERROR",
+			message: "Invalid image format",
+		};
+	}
+
+	const mimeType = matches[1];
+	const ext = mimeType === "image/jpeg" ? "jpg" : mimeType.split("/")[1];
+	const base64Data = matches[3];
+
+	if (!ALLOWED_IMAGE_TYPES.has(mimeType)) {
+		throw {
+			code: "VALIDATION_ERROR",
+			message: "Image must be PNG, JPEG, or WebP",
+		};
+	}
+
+	const binaryStr = atob(base64Data);
+	const bytes = new Uint8Array(binaryStr.length);
+	for (let i = 0; i < binaryStr.length; i++) {
+		bytes[i] = binaryStr.charCodeAt(i);
+	}
+
+	if (bytes.length > MAX_IMAGE_SIZE) {
+		throw { code: "VALIDATION_ERROR", message: "Image must be under 5 MB" };
+	}
+
+	const key = `preview-images/${crypto.randomUUID()}.${ext}`;
+	await env.PREVIEW_IMAGES.put(key, bytes, {
+		httpMetadata: { contentType: mimeType },
+	});
+
+	return `/api/images/${key}`;
+}
+
+export async function handleSubmit(request, env, _ctx) {
 	try {
 		// --- 1. Parse body ---
 		let json, file;
@@ -143,6 +184,19 @@ export async function handleSubmit(request, env, ctx) {
 					return error(400, "VALIDATION_ERROR", err.message);
 				}
 				// Non-fatal: skip image on R2 failure
+				console.error("Image upload failed:", err);
+			}
+		} else if (
+			json.preview_image &&
+			typeof json.preview_image === "string" &&
+			json.preview_image.startsWith("data:")
+		) {
+			try {
+				previewUrl = await uploadBase64Image(json.preview_image, env);
+			} catch (err) {
+				if (err.code === "VALIDATION_ERROR") {
+					return error(400, "VALIDATION_ERROR", err.message);
+				}
 				console.error("Image upload failed:", err);
 			}
 		}
