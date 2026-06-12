@@ -24,6 +24,9 @@ npm-debug.log*
 # Pi runtime state
 .atl/
 
+# SDD transient artifacts
+sdd/
+
 # Empty dir placeholders
 .gitkeep
 
