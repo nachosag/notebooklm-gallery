@@ -1,5 +1,5 @@
 # OpenSpec Configuration
-# NotebookLM Marketplace
+# NotebookLM Gallery
 
 execution_mode: auto
 artifact_store: both
@@ -8,7 +8,7 @@ review_budget_lines: 400
 
 changes:
   notebooklm-marketplace:
-    description: "NotebookLM Marketplace MVP — community-driven directory of shared NotebookLM notebooks"
+    description: "NotebookLM Gallery — community-driven directory of shared NotebookLM notebooks"
     status: archive
     phases:
       - explore

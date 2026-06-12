@@ -1,6 +1,6 @@
-# NotebookLM Marketplace
+# NotebookLM Gallery
 
-A community-driven marketplace for discovering and sharing public Google NotebookLM notebooks. Browse curated knowledge bases across categories like Education, Technology, Research, and more.
+A community-driven gallery for discovering and sharing public Google NotebookLM notebooks. Browse curated knowledge bases across categories like Education, Technology, Research, and more.
 
 **Cost:** $0 — runs entirely on Cloudflare free tier.
 

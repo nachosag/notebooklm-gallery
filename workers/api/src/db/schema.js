@@ -1,5 +1,5 @@
 /**
- * D1 Schema — NotebookLM Marketplace
+ * D1 Schema — NotebookLM Gallery
  * Run on worker startup or via migration.
  */
 

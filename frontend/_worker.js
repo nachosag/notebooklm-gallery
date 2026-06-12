@@ -62,7 +62,7 @@ function sanitizeFts5(query) {
 }
 
 async function hashIp(ip) {
-	const data = new TextEncoder().encode(ip + "notebooklm-marketplace-salt");
+	const data = new TextEncoder().encode(ip + "notebooklm-gallery-salt");
 	const hash = await crypto.subtle.digest("SHA-256", data);
 	return Array.from(new Uint8Array(hash))
 		.map((b) => b.toString(16).padStart(2, "0"))
