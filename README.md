@@ -16,6 +16,7 @@ A community-driven marketplace for discovering and sharing public Google Noteboo
 | File Storage | Cloudflare R2 | 10GB free, S3-compatible |
 | Anti-abuse | Cloudflare Turnstile | Free, invisible CAPTCHA alternative |
 | Analytics | Cloudflare Web Analytics | Free, privacy-first |
+| Testing | Vitest + @cloudflare/vitest-pool-workers | CI-native, Miniflare D1/R2 emulation |
 
 ## Architecture
 
@@ -91,32 +92,62 @@ echo "TURNSTILE_SECRET_KEY=your_secret" >> workers/api/.env
 echo "TURNSTILE_SITE_KEY=your_site_key" >> frontend/.env
 ```
 
-## Deployment
+## Testing
 
-### Worker
+Tests run with [Vitest](https://vitest.dev/) + [@cloudflare/vitest-pool-workers](https://github.com/cloudflare/workers-sdk/tree/main/packages/vitest-pool-workers) for real D1 and R2 emulation via Miniflare.
+
+### Run all tests
 
 ```bash
 cd workers/api
-wrangler deploy
+npm test
 ```
 
-### Frontend
+### Test layout
 
-1. Go to Cloudflare Dashboard → Pages → Create a project
-2. Connect your Git repository
-3. Build command: none (static files)
-4. Output directory: `frontend`
-5. Deploy
+| Layer | File | Tests | What it covers |
+|---|---|---|---|
+| Unit | `test/unit/validation.test.js` | 36 | Title, description, URL, categories, tags — every branch |
+| Unit | `test/unit/ip.test.js` | 4 | Hash determinism, different IPs, hex format |
+| Integration | `test/integration/submit.test.js` | 11 | Full submit flow: validation, Turnstile, rate limiting, image upload, CORS |
+| Integration | `test/integration/turnstile.test.js` | 4 | Dev mode bypass, missing/invalid tokens |
+| Integration | `test/integration/ratelimit.test.js` | 3 | Allow/block logic over the hourly window |
 
-Or via Wrangler:
+**Total: 58 tests.**
+
+### Run a specific test file
 
 ```bash
-npx wrangler pages deploy frontend
+cd workers/api
+npx vitest run test/unit/validation.test.js
 ```
 
-### CI/CD (GitHub Actions)
+### Run in watch mode (development)
 
-This repo includes a GitHub Actions workflow (`.github/workflows/deploy.yml`) that automatically deploys the Worker and frontend on pushes to `main`. Configure these secrets in your repo:
+```bash
+cd workers/api
+npx vitest
+```
+
+### How integration tests work
+
+- **D1 and R2** are emulated via Miniflare (no real infrastructure needed)
+- **Turnstile** uses its built-in dev mode: when `TURNSTILE_SECRET` is not set, verification passes automatically
+- **Rate limiting** runs against an in-memory D1 with seeded log data
+- Tests call handlers directly (`handleSubmit()`) with mocked `Request` and `env` objects
+
+## CI/CD (GitHub Actions)
+
+This repo includes two GitHub Actions workflows:
+
+| Workflow | Trigger | What it does |
+|---|---|---|
+| `deploy.yml` | Push to `main` | Deploys the Worker and frontend to Cloudflare Pages |
+| `test.yml` | Pull request to `main` | Runs all 58 tests with Node.js 20 |
+
+### Secrets
+
+Configure these in your repo's **Settings → Secrets and variables → Actions**:
 
 - `CF_API_TOKEN`: Cloudflare API token with Workers and Pages permissions
 
@@ -149,10 +180,14 @@ notebooklm-marketplace/
 │       │   ├── handlers/   # Route handlers
 │       │   ├── middleware/  # CORS, rate limit, Turnstile
 │       │   └── utils/      # Validation, IP hashing
+│       ├── test/
+│       │   ├── unit/       # 2 files, 40 tests (pure functions)
+│       │   └── integration/ # 3 files, 18 tests (Worker handlers)
+│       ├── vitest.config.mjs
 │       ├── wrangler.toml
 │       └── package.json
 ├── openspec/               # SDD artifacts
-├── .github/workflows/      # CI/CD
+├── .github/workflows/      # deploy.yml + test.yml
 └── README.md
 ```
 
