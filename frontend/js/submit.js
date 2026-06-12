@@ -44,7 +44,6 @@ document.addEventListener("DOMContentLoaded", () => {
 				);
 				selectedCategories = selectedCategories.filter((s) => s !== slug);
 			} else {
-				if (selectedCategories.length >= 3) return; // max 3
 				chip.classList.add(
 					"bg-primary-container",
 					"text-on-primary-container",
@@ -63,37 +62,56 @@ document.addEventListener("DOMContentLoaded", () => {
 	// Tags input
 	const tagsError = document.getElementById("tagsError");
 
+	const tagCountEl = document.getElementById("tagCount");
+
+	function addTag(raw) {
+		const trimmed = raw.trim();
+		if (trimmed.length < 2) {
+			showError("tagInput", "tagsError", "Tags must be at least 2 characters");
+			return;
+		}
+		const existingTags = tagContainer.querySelectorAll("div:not(#tagInput)");
+		if (existingTags.length >= 10) {
+			showError("tagInput", "tagsError", "Maximum 10 tags allowed");
+			return;
+		}
+		clearError("tagInput", "tagsError");
+		const tagText = trimmed.slice(0, 30);
+		const tagElement = document.createElement("div");
+		tagElement.className =
+			"flex items-center gap-1 bg-surface-container-high text-on-secondary-container px-3 py-1 rounded-full font-label-sm text-label-sm";
+		const span = document.createElement("span");
+		span.textContent = tagText;
+		tagElement.appendChild(span);
+		const removeBtn = document.createElement("button");
+		removeBtn.type = "button";
+		removeBtn.className = "hover:text-error flex items-center";
+		const closeIcon = document.createElement("span");
+		closeIcon.className = "material-symbols-outlined text-[14px]";
+		closeIcon.textContent = "close";
+		removeBtn.appendChild(closeIcon);
+		removeBtn.addEventListener("click", () => {
+			tagElement.remove();
+			updateTagCount();
+		});
+		tagElement.appendChild(removeBtn);
+		tagContainer.insertBefore(tagElement, tagInput);
+		updateTagCount();
+	}
+
+	function updateTagCount() {
+		const count = tagContainer.querySelectorAll("div:not(#tagInput)").length;
+		tagCountEl.textContent = count > 0 ? `${count} of 10 tags` : "Type a tag and press Enter. Tags help people find your notebook.";
+	}
+
 	tagInput.addEventListener("keydown", (e) => {
 		if (e.key === "Enter" && tagInput.value.trim() !== "") {
 			e.preventDefault();
-			const raw = tagInput.value.trim();
-			if (raw.length < 2) {
-				showError("tagInput", "tagsError", "Tags must be at least 2 characters");
-				return;
-			}
-			const existingTags = tagContainer.querySelectorAll("div:not(#tagInput)");
-			if (existingTags.length >= 10) {
-				showError("tagInput", "tagsError", "Maximum 10 tags allowed");
-				return;
-			}
-			clearError("tagInput", "tagsError");
-			const tagText = raw.slice(0, 30);
-			const tagElement = document.createElement("div");
-			tagElement.className =
-				"flex items-center gap-1 bg-surface-container-high text-on-secondary-container px-3 py-1 rounded-full font-label-sm text-label-sm";
-			const span = document.createElement("span");
-			span.textContent = tagText;
-			tagElement.appendChild(span);
-			const removeBtn = document.createElement("button");
-			removeBtn.type = "button";
-			removeBtn.className = "hover:text-error flex items-center";
-			const closeIcon = document.createElement("span");
-			closeIcon.className = "material-symbols-outlined text-[14px]";
-			closeIcon.textContent = "close";
-			removeBtn.appendChild(closeIcon);
-			removeBtn.addEventListener("click", () => tagElement.remove());
-			tagElement.appendChild(removeBtn);
-			tagContainer.insertBefore(tagElement, tagInput);
+			const parts = tagInput.value.split(",");
+			parts.forEach((part) => {
+				const trimmed = part.trim();
+				if (trimmed) addTag(trimmed);
+			});
 			tagInput.value = "";
 		}
 	});

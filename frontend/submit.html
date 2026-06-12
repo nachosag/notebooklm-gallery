@@ -394,7 +394,7 @@
             <label
               class="font-label-md text-label-md text-on-surface-variant"
               for="tags"
-              >Tags</label
+              >Tags (optional)</label
             >
             <div
               class="flex flex-wrap gap-2 p-2 border border-outline-variant rounded-lg bg-surface-white focus-within:border-primary transition-all"
@@ -403,12 +403,12 @@
               <input
                 class="border-none bg-transparent p-1 focus:ring-0 font-body-md text-body-md flex-1 min-w-[120px]"
                 id="tagInput"
-                placeholder="Add a tag..."
+                placeholder="e.g., machine-learning"
                 type="text"
               />
             </div>
-            <p class="font-label-sm text-label-sm text-text-muted">
-              Press Enter to add tags.
+            <p class="font-label-sm text-label-sm text-text-muted" id="tagCount">
+              Type a tag and press Enter. Tags help people find your notebook.
             </p>
             <span
               class="hidden text-error font-label-sm text-label-sm"

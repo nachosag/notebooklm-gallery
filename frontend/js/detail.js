@@ -43,10 +43,15 @@ document.addEventListener("DOMContentLoaded", () => {
 
 	function renderDetail(nb) {
 		const primaryCat = (nb.categories || [])[0] || "";
-		const catLabel =
-			CONFIG.CATEGORIES.find((c) => c.slug === primaryCat)?.name || primaryCat;
 		const catIcon =
 			CONFIG.CATEGORIES.find((c) => c.slug === primaryCat)?.icon || "category";
+
+		const categoriesHTML = (nb.categories || [])
+			.map((slug) => {
+				const label = CONFIG.CATEGORIES.find((c) => c.slug === slug)?.name || slug;
+				return `<span class="font-label-sm text-label-sm px-3 py-1 rounded-full bg-secondary-container text-on-secondary-container">${escapeHtml(label)}</span>`;
+			})
+			.join("");
 
 		const thumbContent = nb.preview_url
 			? `<img class="w-full h-full object-cover" src="${escapeHtml(nb.preview_url)}" alt="${escapeHtml(nb.title)}">`
@@ -91,7 +96,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
                     <div class="space-y-stack-md">
                         <div class="flex items-center gap-4">
-                            <span class="font-label-sm text-label-sm px-3 py-1 rounded-full bg-secondary-container text-on-secondary-container">${escapeHtml(catLabel)}</span>
+                            ${categoriesHTML}
                             ${dateStr ? `<span class="font-body-sm text-body-sm text-text-muted">Published ${dateStr}</span>` : ""}
                         </div>
                         <h1 class="font-display-lg text-display-lg text-text-main tracking-tight">${escapeHtml(nb.title)}</h1>
