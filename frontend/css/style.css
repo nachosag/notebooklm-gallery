@@ -89,3 +89,36 @@
 	background: #c2c6d9;
 	border-radius: 9999px;
 }
+
+/* Focus-visible outline for keyboard navigation */
+:focus-visible {
+	outline: 2px solid #004bca;
+	outline-offset: 2px;
+}
+
+/* Skip link — visually hidden until focused */
+.skip-link {
+	position: absolute;
+	left: -9999px;
+	top: auto;
+	width: 1px;
+	height: 1px;
+	overflow: hidden;
+}
+
+.skip-link:focus {
+	position: fixed;
+	left: 50%;
+	top: 1rem;
+	transform: translateX(-50%);
+	width: auto;
+	height: auto;
+	padding: 0.75rem 1.5rem;
+	background: #004bca;
+	color: white;
+	border-radius: 0.5rem;
+	z-index: 9999;
+	text-decoration: none;
+	font-size: 14px;
+	font-weight: 600;
+}

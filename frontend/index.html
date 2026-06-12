@@ -3,6 +3,14 @@
   <head>
     <meta charset="utf-8" />
     <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <meta name="description" content="Discover community-curated NotebookLM knowledge bases across education, technology, research, business, and more. Browse, search, and share AI notebooks." />
+    <meta property="og:title" content="NotebookLM Gallery - Discover AI-Powered Notebooks" />
+    <meta property="og:description" content="Discover community-curated NotebookLM knowledge bases across education, technology, research, business, and more. Browse, search, and share AI notebooks." />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://notebooklm.gallery/" />
+    <meta property="og:image" content="https://notebooklm.gallery/og-image.svg" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <link rel="canonical" href="https://notebooklm.gallery/" />
     <title>NotebookLM Gallery - Discover AI-Powered Notebooks</title>
     <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
     <link
@@ -55,7 +63,7 @@
               "on-secondary": "#ffffff",
               "on-primary-container": "#f1f2ff",
               "on-surface-variant": "#424656",
-              "text-muted": "#64748B",
+              "text-muted": "#475569",
               tertiary: "#9d3000",
               "surface-container-low": "#f2f4f6",
               "on-secondary-fixed-variant": "#3f465c",
@@ -136,6 +144,7 @@
   <body
     class="bg-background text-text-main font-body-md selection:bg-primary-fixed selection:text-on-primary-fixed"
   >
+    <a href="#main-content" class="skip-link">Skip to main content</a>
     <!-- Navigation -->
     <nav
       class="fixed top-0 w-full z-50 bg-surface/80 backdrop-blur-md border-b border-border-subtle shadow-sm"
@@ -175,7 +184,7 @@
             class="text-text-muted hover:text-text-main transition-colors p-1.5 hidden sm:inline-flex"
             title="Star on GitHub"
           >
-            <svg width="22" height="22" viewBox="0 0 98 96" fill="currentColor">
+            <svg width="22" height="22" viewBox="0 0 98 96" fill="currentColor" aria-hidden="true" focusable="false">
               <path
                 d="M48.9 0C21.8 0 0 22 0 49.2a49.2 49.2 0 0 0 33.6 46.7c2.5.5 3.4-1.1 3.4-2.4 0-1.2-.1-5-.1-9.1-13.7 3-16.6-5.9-16.6-5.9-2.2-5.7-5.4-7.2-5.4-7.2-4.4-3 .3-3 .3-3 4.9.3 7.5 5 7.5 5 4.4 7.5 11.4 5.3 14.2 4.1.4-3.2 1.7-5.3 3.1-6.6-10.8-1.2-22.2-5.4-22.2-24.1 0-5.3 1.9-9.7 5-13.1-.5-1.2-2.2-6.2.5-12.9 0 0 4.1-1.3 13.4 5 3.9-1.1 8-1.6 12.1-1.6s8.2.5 12.1 1.6c9.3-6.3 13.4-5 13.4-5 2.7 6.7 1 11.7.5 12.9 3.1 3.4 5 7.8 5 13.1 0 18.7-11.4 22.9-22.2 24.1 1.7 1.5 3.3 4.5 3.3 9.1 0 6.6-.1 11.9-.1 13.5 0 1.3.9 2.9 3.4 2.4A49.2 49.2 0 0 0 97.8 49.2C97.8 22 75.9 0 48.9 0z"
               />
@@ -186,8 +195,8 @@
             class="bg-primary text-on-primary font-label-md text-label-md px-6 py-2.5 rounded-lg hover:shadow-lg transition-all hidden sm:inline-block"
             >Submit Notebook</a
           >
-          <button id="mobileMenuBtn" class="md:hidden text-text-main p-1">
-            <span class="material-symbols-outlined">menu</span>
+          <button id="mobileMenuBtn" class="md:hidden text-text-main p-1" aria-expanded="false" aria-controls="mobileNav" aria-label="Toggle navigation">
+            <span class="material-symbols-outlined" aria-hidden="true">menu</span>
           </button>
         </div>
       </div>
@@ -227,6 +236,7 @@
 
     <!-- Main Layout -->
     <main
+      id="main-content"
       class="pt-24 pb-stack-lg max-w-container-max mx-auto px-gutter grid grid-cols-12 gap-8"
     >
       <!-- Sidebar -->
@@ -244,94 +254,94 @@
         <nav class="space-y-1">
           <a
             class="flex items-center gap-3 px-4 py-3 text-on-secondary-container hover:bg-surface-container-highest rounded-lg transition-all"
-            href="#"
+            href="/?category=all"
             data-category="all"
           >
-            <span class="material-symbols-outlined">grid_view</span>
+            <span class="material-symbols-outlined" aria-hidden="true">grid_view</span>
             <span class="font-label-md text-label-md">All Notebooks</span>
           </a>
           <a
             class="flex items-center gap-3 px-4 py-3 text-on-secondary-container hover:bg-surface-container-highest rounded-lg transition-all"
-            href="#"
+            href="/?category=education"
             data-category="education"
           >
-            <span class="material-symbols-outlined">school</span>
+            <span class="material-symbols-outlined" aria-hidden="true">school</span>
             <span class="font-label-md text-label-md">Educación</span>
           </a>
           <a
             class="flex items-center gap-3 px-4 py-3 text-on-secondary-container hover:bg-surface-container-highest rounded-lg transition-all"
-            href="#"
+            href="/?category=technology"
             data-category="technology"
           >
-            <span class="material-symbols-outlined">memory</span>
+            <span class="material-symbols-outlined" aria-hidden="true">memory</span>
             <span class="font-label-md text-label-md">Technology</span>
           </a>
           <a
             class="flex items-center gap-3 px-4 py-3 text-on-secondary-container hover:bg-surface-container-highest rounded-lg transition-all"
-            href="#"
+            href="/?category=research"
             data-category="research"
           >
-            <span class="material-symbols-outlined">science</span>
+            <span class="material-symbols-outlined" aria-hidden="true">science</span>
             <span class="font-label-md text-label-md">Research</span>
           </a>
           <a
             class="flex items-center gap-3 px-4 py-3 text-on-secondary-container hover:bg-surface-container-highest rounded-lg transition-all"
-            href="#"
+            href="/?category=creative"
             data-category="creative"
           >
-            <span class="material-symbols-outlined">palette</span>
+            <span class="material-symbols-outlined" aria-hidden="true">palette</span>
             <span class="font-label-md text-label-md">Creative</span>
           </a>
           <a
             class="flex items-center gap-3 px-4 py-3 text-on-secondary-container hover:bg-surface-container-highest rounded-lg transition-all"
-            href="#"
+            href="/?category=business"
             data-category="business"
           >
-            <span class="material-symbols-outlined">business_center</span>
+            <span class="material-symbols-outlined" aria-hidden="true">business_center</span>
             <span class="font-label-md text-label-md">Business</span>
           </a>
           <a
             class="flex items-center gap-3 px-4 py-3 text-on-secondary-container hover:bg-surface-container-highest rounded-lg transition-all"
-            href="#"
+            href="/?category=health"
             data-category="health"
           >
-            <span class="material-symbols-outlined">ecg_heart</span>
+            <span class="material-symbols-outlined" aria-hidden="true">ecg_heart</span>
             <span class="font-label-md text-label-md"
               >Health &amp; Medicine</span
             >
           </a>
           <a
             class="flex items-center gap-3 px-4 py-3 text-on-secondary-container hover:bg-surface-container-highest rounded-lg transition-all"
-            href="#"
+            href="/?category=productivity"
             data-category="productivity"
           >
-            <span class="material-symbols-outlined">checklist</span>
+            <span class="material-symbols-outlined" aria-hidden="true">checklist</span>
             <span class="font-label-md text-label-md">Productivity</span>
           </a>
           <a
             class="flex items-center gap-3 px-4 py-3 text-on-secondary-container hover:bg-surface-container-highest rounded-lg transition-all"
-            href="#"
+            href="/?category=history"
             data-category="history"
           >
-            <span class="material-symbols-outlined">history</span>
+            <span class="material-symbols-outlined" aria-hidden="true">history</span>
             <span class="font-label-md text-label-md"
               >History &amp; Humanities</span
             >
           </a>
           <a
             class="flex items-center gap-3 px-4 py-3 text-on-secondary-container hover:bg-surface-container-highest rounded-lg transition-all"
-            href="#"
+            href="/?category=reference"
             data-category="reference"
           >
-            <span class="material-symbols-outlined">menu_book</span>
+            <span class="material-symbols-outlined" aria-hidden="true">menu_book</span>
             <span class="font-label-md text-label-md">Reference</span>
           </a>
           <a
             class="flex items-center gap-3 px-4 py-3 text-on-secondary-container hover:bg-surface-container-highest rounded-lg transition-all"
-            href="#"
+            href="/?category=other"
             data-category="other"
           >
-            <span class="material-symbols-outlined">category</span>
+            <span class="material-symbols-outlined" aria-hidden="true">category</span>
             <span class="font-label-md text-label-md">Other</span>
           </a>
         </nav>
@@ -361,7 +371,7 @@
           <div class="relative group">
             <span
               class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-text-muted group-focus-within:text-primary transition-colors"
-              >search</span
+              aria-hidden="true">search</span
             >
             <input
               id="searchInput"
@@ -397,7 +407,7 @@
             class="flex items-center gap-2 px-8 py-4 bg-surface-white border border-border-subtle rounded-xl font-label-md text-label-md text-text-main hover:bg-surface-container-low transition-all active:scale-95 shadow-sm"
           >
             Load more notebooks
-            <span class="material-symbols-outlined">expand_more</span>
+            <span class="material-symbols-outlined" aria-hidden="true">expand_more</span>
           </button>
         </div>
       </section>
@@ -419,25 +429,21 @@
           >
         </div>
         <div class="flex flex-wrap justify-center gap-x-8 gap-y-4">
-          <a
-            class="font-body-sm text-body-sm text-text-muted hover:text-text-main transition-opacity"
-            href="#"
-            >Privacy Policy</a
+          <span
+            class="font-body-sm text-body-sm text-text-muted"
+            >Privacy Policy</span
           >
-          <a
-            class="font-body-sm text-body-sm text-text-muted hover:text-text-main transition-opacity"
-            href="#"
-            >Terms of Service</a
+          <span
+            class="font-body-sm text-body-sm text-text-muted"
+            >Terms of Service</span
           >
-          <a
-            class="font-body-sm text-body-sm text-text-muted hover:text-text-main transition-opacity"
-            href="#"
-            >Contact Support</a
+          <span
+            class="font-body-sm text-body-sm text-text-muted"
+            >Contact Support</span
           >
-          <a
-            class="font-body-sm text-body-sm text-text-muted hover:text-text-main transition-opacity"
-            href="#"
-            >About</a
+          <span
+            class="font-body-sm text-body-sm text-text-muted"
+            >About</span
           >
           <a
             class="font-body-sm text-body-sm text-text-muted hover:text-text-main transition-opacity"

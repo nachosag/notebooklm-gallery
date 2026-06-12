@@ -3,6 +3,14 @@
   <head>
     <meta charset="utf-8" />
     <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <meta name="description" content="Explore a community-curated NotebookLM notebook with full details, categories, and related content. Dive into AI-powered knowledge bases shared by the community." />
+    <meta property="og:title" content="Notebook Detail | NotebookLM Gallery" />
+    <meta property="og:description" content="Explore a community-curated NotebookLM notebook with full details, categories, and related content. Dive into AI-powered knowledge bases shared by the community." />
+    <meta property="og:type" content="article" />
+    <meta property="og:url" content="https://notebooklm.gallery/notebook/" />
+    <meta property="og:image" content="https://notebooklm.gallery/og-image.svg" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <link rel="canonical" href="" />
     <title>Notebook Detail | NotebookLM Gallery</title>
     <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
     <link
@@ -55,7 +63,7 @@
               "on-secondary": "#ffffff",
               "on-primary-container": "#f1f2ff",
               "on-surface-variant": "#424656",
-              "text-muted": "#64748B",
+              "text-muted": "#475569",
               tertiary: "#9d3000",
               "surface-container-low": "#f2f4f6",
               "on-secondary-fixed-variant": "#3f465c",
@@ -186,6 +194,7 @@
   <body
     class="bg-background text-text-main font-body-md selection:bg-primary-fixed selection:text-on-primary-fixed"
   >
+    <a href="#main-content" class="skip-link">Skip to main content</a>
     <!-- Navbar -->
     <header
       class="fixed top-0 w-full z-50 glass-header border-b border-border-subtle shadow-sm"
@@ -225,7 +234,7 @@
             class="text-text-muted hover:text-text-main transition-colors hidden md:inline-flex"
             title="Star on GitHub"
           >
-            <svg width="22" height="22" viewBox="0 0 98 96" fill="currentColor">
+            <svg width="22" height="22" viewBox="0 0 98 96" fill="currentColor" aria-hidden="true" focusable="false">
               <path
                 d="M48.9 0C21.8 0 0 22 0 49.2a49.2 49.2 0 0 0 33.6 46.7c2.5.5 3.4-1.1 3.4-2.4 0-1.2-.1-5-.1-9.1-13.7 3-16.6-5.9-16.6-5.9-2.2-5.7-5.4-7.2-5.4-7.2-4.4-3 .3-3 .3-3 4.9.3 7.5 5 7.5 5 4.4 7.5 11.4 5.3 14.2 4.1.4-3.2 1.7-5.3 3.1-6.6-10.8-1.2-22.2-5.4-22.2-24.1 0-5.3 1.9-9.7 5-13.1-.5-1.2-2.2-6.2.5-12.9 0 0 4.1-1.3 13.4 5 3.9-1.1 8-1.6 12.1-1.6s8.2.5 12.1 1.6c9.3-6.3 13.4-5 13.4-5 2.7 6.7 1 11.7.5 12.9 3.1 3.4 5 7.8 5 13.1 0 18.7-11.4 22.9-22.2 24.1 1.7 1.5 3.3 4.5 3.3 9.1 0 6.6-.1 11.9-.1 13.5 0 1.3.9 2.9 3.4 2.4A49.2 49.2 0 0 0 97.8 49.2C97.8 22 75.9 0 48.9 0z"
               />
@@ -237,14 +246,25 @@
           >
             Submit Notebook
           </a>
-          <button class="md:hidden text-text-main">
-            <span class="material-symbols-outlined">menu</span>
+          <button id="mobileMenuBtn" class="md:hidden text-text-main" aria-expanded="false" aria-controls="mobileNav" aria-label="Toggle navigation">
+            <span class="material-symbols-outlined" aria-hidden="true">menu</span>
           </button>
         </div>
+      </div>
+      <div
+        id="mobileNav"
+        class="hidden md:hidden border-t border-border-subtle bg-surface px-gutter py-4 space-y-2"
+      >
+        <a class="block font-body-md text-body-md text-primary font-bold" href="/">Discover</a>
+        <a class="block font-body-md text-body-md text-text-muted hover:text-primary" href="/?sort=popular">Trending</a>
+        <a class="block font-body-md text-body-md text-text-muted hover:text-primary" href="/?sort=recent">Recent</a>
+        <a class="block mt-2 bg-primary text-on-primary text-center font-label-md text-label-md px-4 py-2 rounded-lg" href="/submit">Submit Notebook</a>
+        <a class="block font-body-sm text-body-sm text-text-muted hover:text-primary text-center pt-2" href="https://github.com/nachosag/notebooklm-gallery" target="_blank" rel="noopener noreferrer">⭐ Star on GitHub</a>
       </div>
     </header>
 
     <main
+      id="main-content"
       class="pt-24 pb-stack-lg max-w-container-max mx-auto px-gutter min-h-screen"
     >
       <!-- Loading State -->
@@ -261,7 +281,7 @@
         id="notFoundState"
         class="hidden text-center py-24 flex flex-col items-center gap-6"
       >
-        <span class="material-symbols-outlined text-7xl text-text-muted/20"
+        <span class="material-symbols-outlined text-7xl text-text-muted/20" aria-hidden="true"
           >not_listed_location</span
         >
         <h2 class="font-headline-lg text-headline-lg text-text-main">
@@ -298,25 +318,21 @@
           >
         </div>
         <div class="flex flex-wrap justify-center gap-x-8 gap-y-4">
-          <a
-            class="font-body-sm text-body-sm text-text-muted hover:text-text-main transition-opacity"
-            href="#"
-            >Privacy Policy</a
+          <span
+            class="font-body-sm text-body-sm text-text-muted"
+            >Privacy Policy</span
           >
-          <a
-            class="font-body-sm text-body-sm text-text-muted hover:text-text-main transition-opacity"
-            href="#"
-            >Terms of Service</a
+          <span
+            class="font-body-sm text-body-sm text-text-muted"
+            >Terms of Service</span
           >
-          <a
-            class="font-body-sm text-body-sm text-text-muted hover:text-text-main transition-opacity"
-            href="#"
-            >Contact Support</a
+          <span
+            class="font-body-sm text-body-sm text-text-muted"
+            >Contact Support</span
           >
-          <a
-            class="font-body-sm text-body-sm text-text-muted hover:text-text-main transition-opacity"
-            href="#"
-            >About</a
+          <span
+            class="font-body-sm text-body-sm text-text-muted"
+            >About</span
           >
           <a
             class="font-body-sm text-body-sm text-text-muted hover:text-text-main transition-opacity"
@@ -331,5 +347,19 @@
 
     <script src="/js/config.js"></script>
     <script src="/js/detail.js"></script>
+    <script>
+      document.addEventListener("DOMContentLoaded", function() {
+        const btn = document.getElementById("mobileMenuBtn");
+        const nav = document.getElementById("mobileNav");
+        if (btn && nav) {
+          btn.addEventListener("click", function() {
+            const isOpen = !nav.classList.contains("hidden");
+            nav.classList.toggle("hidden", isOpen);
+            btn.setAttribute("aria-expanded", !isOpen);
+            btn.querySelector(".material-symbols-outlined").textContent = isOpen ? "menu" : "close";
+          });
+        }
+      });
+    </script>
   </body>
 </html>

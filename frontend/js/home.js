@@ -4,6 +4,15 @@ function escapeHtml(str) {
 	return String(str).replace(/[&<>"'`]/g, c => map[c]);
 }
 
+function injectStructuredData(jsonObj) {
+	const existing = document.querySelector('script[type="application/ld+json"]');
+	if (existing) existing.remove();
+	const script = document.createElement('script');
+	script.type = 'application/ld+json';
+	script.textContent = JSON.stringify(jsonObj);
+	document.head.appendChild(script);
+}
+
 // NotebookLM Gallery - Discover Page
 const state = {
 	page: 1,
@@ -13,6 +22,7 @@ const state = {
 	sort: "recent",
 	loading: false,
 	hasMore: true,
+	notebooks: [],
 };
 
 function buildQueryString() {
@@ -48,7 +58,7 @@ function createCardHTML(notebook) {
 
 	// Preview: use image if available, else fallback gradient
 	const thumbContent = notebook.preview_url
-		? `<img class="w-full h-full object-cover" src="${escapeHtml(notebook.preview_url)}" alt="${escapeHtml(notebook.title)}" />`
+		? `<img class="w-full h-full object-cover" src="${escapeHtml(notebook.preview_url)}" alt="${escapeHtml(notebook.title)} - ${escapeHtml((notebook.description || '').slice(0, 100))}" />`
 		: `<div class="w-full h-full thumbnail-fallback flex items-center justify-center"><span class="material-symbols-outlined text-4xl text-white/60">${catIcon}</span></div>`;
 
 	const likeIcon = `favorite`; // Material Symbol for heart
@@ -65,7 +75,7 @@ function createCardHTML(notebook) {
                 <h3 class="font-headline-sm text-headline-sm text-text-main line-clamp-2">${escapeHtml(notebook.title)}</h3>
                 <p class="font-body-sm text-body-sm text-text-muted line-clamp-2 leading-relaxed">${escapeHtml(notebook.description)}</p>
                 <div class="pt-2 flex items-center gap-1.5 text-text-muted">
-                    <span class="material-symbols-outlined text-lg heart-icon ${notebook.liked ? "liked" : ""}" data-liked="${notebook.liked || false}" onclick="event.preventDefault(); toggleLike('${notebook.id}', this)">${likeIcon}</span>
+                    <span class="material-symbols-outlined text-lg heart-icon ${notebook.liked ? "liked" : ""}" data-liked="${notebook.liked || false}" role="button" tabindex="0" aria-pressed="${notebook.liked ? "true" : "false"}" aria-label="Like ${escapeHtml(notebook.title)}" onclick="event.preventDefault(); toggleLike('${notebook.id}', this)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();this.click()}">${likeIcon}</span>
                     <span class="font-label-sm text-label-sm like-count">${notebook.likes || 0}</span>
                 </div>
             </div>
@@ -75,6 +85,8 @@ function createCardHTML(notebook) {
 
 function renderNotebooks(notebooks) {
 	const grid = document.getElementById("notebookGrid");
+	grid.setAttribute("aria-live", "polite");
+	grid.setAttribute("aria-atomic", "true");
 	if (!notebooks || notebooks.length === 0) {
 		if (state.page === 1) {
 			grid.innerHTML = `
@@ -87,18 +99,64 @@ function renderNotebooks(notebooks) {
             `;
 		}
 		state.hasMore = false;
+		injectHomeStructuredData(state.notebooks);
 		return;
 	}
 
 	const html = notebooks.map(createCardHTML).join("");
 	if (state.page === 1) {
+		state.notebooks = notebooks;
 		grid.innerHTML = html;
 	} else {
+		state.notebooks.push(...notebooks);
 		grid.insertAdjacentHTML("beforeend", html);
 	}
 
 	state.hasMore = notebooks.length >= CONFIG.PAGE_LIMIT;
 	updatePagination();
+	injectHomeStructuredData(state.notebooks);
+}
+
+function injectHomeStructuredData(notebooks) {
+	const graph = [
+		{
+			"@type": "WebSite",
+			"name": "NotebookLM Gallery",
+			"url": "https://notebooklm.gallery/",
+			"potentialAction": {
+				"@type": "SearchAction",
+				"target": {
+					"@type": "EntryPoint",
+					"urlTemplate": "https://notebooklm.gallery/?q={search_term_string}"
+				},
+				"query-input": "required name=search_term_string"
+			}
+		}
+	];
+
+	if (notebooks && notebooks.length > 0) {
+		graph.push({
+			"@type": "ItemList",
+			"itemListElement": notebooks.map((nb, i) => ({
+				"@type": "ListItem",
+				"position": i + 1,
+				"item": {
+					"@type": "CreativeWork",
+					"name": nb.title,
+					"description": nb.description,
+					"url": `https://notebooklm.gallery/notebook/${nb.id}`,
+					"image": nb.preview_url || "",
+					"category": (nb.categories || [])[0] || "",
+					"datePublished": nb.created_at || ""
+				}
+			}))
+		});
+	}
+
+	injectStructuredData({
+		"@context": "https://schema.org",
+		"@graph": graph
+	});
 }
 
 function updatePagination() {
@@ -114,6 +172,7 @@ async function loadNotebooks(reset = false) {
 
 	if (reset) {
 		state.page = 1;
+		state.notebooks = [];
 		document.getElementById("notebookGrid").innerHTML = "";
 	}
 
@@ -168,12 +227,14 @@ function setupCategoryFilter() {
 					"text-on-secondary-container",
 					"hover:bg-surface-container-highest",
 				);
+				l.removeAttribute("aria-current");
 			});
 			link.classList.add("category-active");
 			link.classList.remove(
 				"text-on-secondary-container",
 				"hover:bg-surface-container-highest",
 			);
+			link.setAttribute("aria-current", "page");
 
 			state.category = cat === "all" ? null : cat;
 			loadNotebooks(true);
@@ -188,6 +249,7 @@ function setupCategoryFilter() {
 			"text-on-secondary-container",
 			"hover:bg-surface-container-highest",
 		);
+		allLink.setAttribute("aria-current", "page");
 	}
 }
 
@@ -208,6 +270,7 @@ async function toggleLike(notebookId, element) {
 	// Optimistic update
 	element.dataset.liked = newLiked;
 	element.classList.toggle("liked", newLiked);
+	element.setAttribute("aria-pressed", newLiked);
 	const countSpan = element.parentElement.querySelector(".like-count");
 	const currentCount = parseInt(countSpan.textContent || "0");
 	countSpan.textContent = newLiked
@@ -223,6 +286,7 @@ async function toggleLike(notebookId, element) {
 		// Revert on error
 		element.dataset.liked = liked;
 		element.classList.toggle("liked", liked);
+		element.setAttribute("aria-pressed", liked);
 		countSpan.textContent = currentCount;
 	}
 }
@@ -245,6 +309,7 @@ function setupMobileMenu() {
 		btn.querySelector(".material-symbols-outlined").textContent = isOpen
 			? "menu"
 			: "close";
+		btn.setAttribute("aria-expanded", (!isOpen).toString());
 	});
 }
 

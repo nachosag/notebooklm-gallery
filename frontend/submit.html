@@ -3,6 +3,14 @@
   <head>
     <meta charset="utf-8" />
     <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <meta name="description" content="Share your curated NotebookLM notebook with the community. Submit your AI-powered knowledge base to be featured in the NotebookLM Gallery and help others learn." />
+    <meta property="og:title" content="Submit Notebook | NotebookLM Gallery" />
+    <meta property="og:description" content="Share your curated NotebookLM notebook with the community. Submit your AI-powered knowledge base to be featured in the NotebookLM Gallery and help others learn." />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://notebooklm.gallery/submit" />
+    <meta property="og:image" content="https://notebooklm.gallery/og-image.svg" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <link rel="canonical" href="https://notebooklm.gallery/submit" />
     <title>Submit Notebook | NotebookLM Gallery</title>
     <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
     <link
@@ -60,7 +68,7 @@
               "on-secondary": "#ffffff",
               "on-primary-container": "#f1f2ff",
               "on-surface-variant": "#424656",
-              "text-muted": "#64748B",
+              "text-muted": "#475569",
               tertiary: "#9d3000",
               "surface-container-low": "#f2f4f6",
               "on-secondary-fixed-variant": "#3f465c",
@@ -149,6 +157,7 @@
     </style>
   </head>
   <body class="bg-surface text-text-main font-body-md">
+    <a href="#main-content" class="skip-link">Skip to main content</a>
     <!-- TopNavBar -->
     <header
       class="fixed top-0 w-full z-50 bg-surface/80 backdrop-blur-md border-b border-border-subtle shadow-sm"
@@ -188,7 +197,7 @@
             class="text-text-muted hover:text-text-main transition-colors p-1.5 hidden sm:inline-flex"
             title="Star on GitHub"
           >
-            <svg width="22" height="22" viewBox="0 0 98 96" fill="currentColor">
+            <svg width="22" height="22" viewBox="0 0 98 96" fill="currentColor" aria-hidden="true" focusable="false">
               <path
                 d="M48.9 0C21.8 0 0 22 0 49.2a49.2 49.2 0 0 0 33.6 46.7c2.5.5 3.4-1.1 3.4-2.4 0-1.2-.1-5-.1-9.1-13.7 3-16.6-5.9-16.6-5.9-2.2-5.7-5.4-7.2-5.4-7.2-4.4-3 .3-3 .3-3 4.9.3 7.5 5 7.5 5 4.4 7.5 11.4 5.3 14.2 4.1.4-3.2 1.7-5.3 3.1-6.6-10.8-1.2-22.2-5.4-22.2-24.1 0-5.3 1.9-9.7 5-13.1-.5-1.2-2.2-6.2.5-12.9 0 0 4.1-1.3 13.4 5 3.9-1.1 8-1.6 12.1-1.6s8.2.5 12.1 1.6c9.3-6.3 13.4-5 13.4-5 2.7 6.7 1 11.7.5 12.9 3.1 3.4 5 7.8 5 13.1 0 18.7-11.4 22.9-22.2 24.1 1.7 1.5 3.3 4.5 3.3 9.1 0 6.6-.1 11.9-.1 13.5 0 1.3.9 2.9 3.4 2.4A49.2 49.2 0 0 0 97.8 49.2C97.8 22 75.9 0 48.9 0z"
               />
@@ -204,7 +213,7 @@
     </header>
 
     <!-- Main Content -->
-    <main class="pt-32 pb-20 px-gutter min-h-screen">
+    <main id="main-content" class="pt-32 pb-20 px-gutter min-h-screen">
       <div class="max-w-[640px] mx-auto">
         <!-- Header -->
         <div class="mb-stack-lg text-center" id="formHeader">
@@ -225,7 +234,7 @@
           <div
             class="w-16 h-16 bg-success-green/10 text-success-green rounded-full flex items-center justify-center"
           >
-            <span class="material-symbols-outlined text-4xl">check_circle</span>
+            <span class="material-symbols-outlined text-4xl" aria-hidden="true">check_circle</span>
           </div>
           <div>
             <h2 class="font-headline-md text-headline-md mb-2">Published!</h2>
@@ -292,7 +301,7 @@
             <div class="relative">
               <span
                 class="absolute left-3 top-1/2 -translate-y-1/2 material-symbols-outlined text-text-muted"
-                >link</span
+                aria-hidden="true">link</span
               >
               <input
                 class="w-full bg-surface-white border border-outline-variant rounded-lg p-3 pl-10 font-body-md text-body-md focus:border-primary transition-all"
@@ -354,7 +363,7 @@
             >
               <span
                 class="material-symbols-outlined text-text-muted group-hover:text-primary text-4xl"
-                >cloud_upload</span
+                aria-hidden="true">cloud_upload</span
               >
               <p class="font-body-md text-body-md text-text-muted">
                 Drag and drop or click to upload
@@ -388,7 +397,7 @@
                 id="removeImg"
                 type="button"
               >
-                <span class="material-symbols-outlined text-sm">close</span>
+                <span class="material-symbols-outlined text-sm" aria-hidden="true">close</span>
               </button>
             </div>
           </div>
@@ -448,7 +457,7 @@
               type="submit"
             >
               Publish Notebook
-              <span class="material-symbols-outlined">send</span>
+              <span class="material-symbols-outlined" aria-hidden="true">send</span>
             </button>
           </div>
         </form>
@@ -471,25 +480,21 @@
           >
         </div>
         <div class="flex gap-6 mt-4 md:mt-0">
-          <a
-            class="font-body-sm text-body-sm text-text-muted hover:text-text-main transition-colors"
-            href="#"
-            >Privacy Policy</a
+          <span
+            class="font-body-sm text-body-sm text-text-muted"
+            >Privacy Policy</span
           >
-          <a
-            class="font-body-sm text-body-sm text-text-muted hover:text-text-main transition-colors"
-            href="#"
-            >Terms of Service</a
+          <span
+            class="font-body-sm text-body-sm text-text-muted"
+            >Terms of Service</span
           >
-          <a
-            class="font-body-sm text-body-sm text-text-muted hover:text-text-main transition-colors"
-            href="#"
-            >Contact Support</a
+          <span
+            class="font-body-sm text-body-sm text-text-muted"
+            >Contact Support</span
           >
-          <a
-            class="font-body-sm text-body-sm text-text-muted hover:text-text-main transition-colors"
-            href="#"
-            >About</a
+          <span
+            class="font-body-sm text-body-sm text-text-muted"
+            >About</span
           >
           <a
             class="font-body-sm text-body-sm text-text-muted hover:text-text-main transition-colors"

@@ -9,6 +9,7 @@ import {
 	handleTrendingTags,
 } from "./handlers/notebooks.js";
 import { handleLike } from "./handlers/likes.js";
+import { handleSitemap, handleRobots } from "./handlers/seo.js";
 
 async function handleImage(req, env) {
 	const url = new URL(req.url);
@@ -37,6 +38,10 @@ router.post("/api/notebooks/:id/like", (req, env) =>
 router.get("/api/categories", (req, env) => handleCategories(req, env));
 router.get("/api/tags/trending", (req, env) => handleTrendingTags(req, env));
 router.get("/api/images/*", (req, env) => handleImage(req, env));
+
+// SEO routes
+router.get("/sitemap.xml", (req, env, ctx) => handleSitemap(req, env, ctx));
+router.get("/robots.txt", (req, env) => handleRobots(req, env));
 
 // 404
 router.all(

@@ -4,6 +4,37 @@ function escapeHtml(str) {
 	return String(str).replace(/[&<>"'`]/g, c => map[c]);
 }
 
+function updateMetaTag(selector, content) {
+	let el = document.querySelector(selector);
+	if (!el) {
+		const isLink = selector.startsWith('link');
+		el = document.createElement(isLink ? 'link' : 'meta');
+		const attrPattern = /\[([^\]]+)\]/g;
+		let m;
+		while ((m = attrPattern.exec(selector)) !== null) {
+			const parts = m[1].split('=');
+			const attrName = parts[0];
+			const attrValue = parts.slice(1).join('=').replace(/^"(.*)"$/, '$1');
+			el.setAttribute(attrName, attrValue);
+		}
+		document.head.appendChild(el);
+	}
+	if (selector.startsWith('link')) {
+		el.setAttribute('href', content);
+	} else {
+		el.setAttribute('content', content);
+	}
+}
+
+function injectStructuredData(jsonObj) {
+	const existing = document.querySelector('script[type="application/ld+json"]');
+	if (existing) existing.remove();
+	const script = document.createElement('script');
+	script.type = 'application/ld+json';
+	script.textContent = JSON.stringify(jsonObj);
+	document.head.appendChild(script);
+}
+
 // NotebookLM Gallery - Detail Page
 document.addEventListener("DOMContentLoaded", () => {
 	const notebookId = window.location.pathname.split("/").pop();
@@ -46,6 +77,32 @@ document.addEventListener("DOMContentLoaded", () => {
 		const catIcon =
 			CONFIG.CATEGORIES.find((c) => c.slug === primaryCat)?.icon || "category";
 
+		const notebookUrl = `https://notebooklm.gallery/notebook/${notebookId}`;
+
+		// Dynamic meta tags
+		document.title = `${nb.title} | NotebookLM Gallery`;
+		updateMetaTag('meta[name="description"]', nb.description);
+		updateMetaTag('meta[property="og:title"]', nb.title);
+		updateMetaTag('meta[property="og:description"]', nb.description);
+		updateMetaTag('meta[property="og:url"]', notebookUrl);
+		if (nb.preview_url) {
+			updateMetaTag('meta[property="og:image"]', nb.preview_url);
+		}
+		updateMetaTag('meta[name="twitter:title"]', nb.title);
+		updateMetaTag('meta[name="twitter:description"]', nb.description);
+		if (nb.preview_url) {
+			updateMetaTag('meta[name="twitter:image"]', nb.preview_url);
+		}
+		updateMetaTag('link[rel="canonical"]', notebookUrl);
+
+		// Inject article meta tags (may need creation)
+		if (nb.created_at) {
+			updateMetaTag('meta[property="article:published_time"]', nb.created_at);
+		}
+		if (nb.tags && nb.tags.length > 0) {
+			updateMetaTag('meta[property="article:tag"]', nb.tags.join(", "));
+		}
+
 		const categoriesHTML = (nb.categories || [])
 			.map((slug) => {
 				const label = CONFIG.CATEGORIES.find((c) => c.slug === slug)?.name || slug;
@@ -54,7 +111,7 @@ document.addEventListener("DOMContentLoaded", () => {
 			.join("");
 
 		const thumbContent = nb.preview_url
-			? `<img class="w-full h-full object-cover" src="${escapeHtml(nb.preview_url)}" alt="${escapeHtml(nb.title)}">`
+			? `<img class="w-full h-full object-cover" src="${escapeHtml(nb.preview_url)}" alt="${escapeHtml(nb.title)} - ${escapeHtml((nb.description || '').slice(0, 100))}">`
 			: `<div class="w-full h-full thumbnail-fallback flex items-center justify-center"><span class="material-symbols-outlined text-6xl text-white/60">${catIcon}</span></div>`;
 
 		const tagsHTML = (nb.tags || [])
@@ -124,7 +181,7 @@ document.addEventListener("DOMContentLoaded", () => {
                         <!-- Like + Open in NotebookLM -->
                         <div class="space-y-4">
                             <div class="flex items-center gap-3">
-                                <button id="likeBtn" class="flex items-center gap-2 px-5 py-3 border border-border-subtle rounded-lg hover:bg-surface-container-low transition-colors">
+                                <button id="likeBtn" class="flex items-center gap-2 px-5 py-3 border border-border-subtle rounded-lg hover:bg-surface-container-low transition-colors" aria-label="Like this notebook" aria-pressed="${nb.liked ? "true" : "false"}">
                                     <span class="material-symbols-outlined heart-icon ${nb.liked ? "liked" : ""}" id="likeIcon">favorite</span>
                                     <span class="font-label-md text-label-md" id="likeCount">${nb.likes || 0}</span>
                                 </button>
@@ -157,6 +214,7 @@ document.addEventListener("DOMContentLoaded", () => {
 			liked = !liked;
 			likeCount += liked ? 1 : -1;
 			likeIcon.classList.toggle("liked", liked);
+			likeBtn.setAttribute("aria-pressed", liked);
 			likeCountEl.textContent = likeCount;
 
 			try {
@@ -169,8 +227,42 @@ document.addEventListener("DOMContentLoaded", () => {
 				liked = !liked;
 				likeCount += liked ? 1 : -1;
 				likeIcon.classList.toggle("liked", liked);
+				likeBtn.setAttribute("aria-pressed", liked);
 				likeCountEl.textContent = likeCount;
 			}
+		});
+
+		// JSON-LD structured data
+		const ldGraph = [
+			{
+				"@type": "WebPage",
+				"@id": notebookUrl,
+				"url": notebookUrl,
+				"name": nb.title,
+				"description": nb.description,
+				"isPartOf": {
+					"@id": "https://notebooklm.gallery/"
+				}
+			},
+			{
+				"@type": "CreativeWork",
+				"mainEntityOfPage": notebookUrl,
+				"name": nb.title,
+				"description": nb.description,
+				"image": nb.preview_url || "",
+				"datePublished": nb.created_at || "",
+				"author": {
+					"@type": "Person",
+					"name": "Community contributor"
+				},
+				"keywords": (nb.tags || []).join(", "),
+				"category": primaryCat
+			}
+		];
+
+		injectStructuredData({
+			"@context": "https://schema.org",
+			"@graph": ldGraph
 		});
 	}
 

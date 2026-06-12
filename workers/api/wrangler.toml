@@ -11,15 +11,23 @@ database_id = "045bb108-427e-44a6-bbd8-4e0e8341bdd4"
 binding = "PREVIEW_IMAGES"
 bucket_name = "notebooklm-marketplace-previews"
 
+[[kv_namespaces]]
+binding = "SITEMAP_CACHE"
+id = ""
+
 [env.production]
 vars = { ENVIRONMENT = "production", R2_PUBLIC_URL = "" }
 account_id = "18dc6f95f068dd5cfa95520d3f08760a"
 
-[env.production.d1_databases]
+[[env.production.d1_databases]]
 binding = "DB"
 database_name = "notebooklm-marketplace"
 database_id = "045bb108-427e-44a6-bbd8-4e0e8341bdd4"
 
-[env.production.r2_buckets]
+[[env.production.r2_buckets]]
 binding = "PREVIEW_IMAGES"
 bucket_name = "notebooklm-marketplace-previews"
+
+[[env.production.kv_namespaces]]
+binding = "SITEMAP_CACHE"
+id = ""

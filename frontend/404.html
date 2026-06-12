@@ -3,6 +3,15 @@
   <head>
     <meta charset="utf-8" />
     <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <meta name="description" content="Page not found. The NotebookLM Gallery page you are looking for does not exist or has been moved. Browse our gallery or head back to discover community-curated notebooks." />
+    <meta property="og:title" content="404 - Page Not Found | NotebookLM Gallery" />
+    <meta property="og:description" content="Page not found. The NotebookLM Gallery page you are looking for does not exist or has been moved. Browse our gallery or head back to discover community-curated notebooks." />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://notebooklm.gallery/404" />
+    <meta property="og:image" content="https://notebooklm.gallery/og-image.svg" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="robots" content="noindex" />
+    <link rel="canonical" href="https://notebooklm.gallery/404" />
     <title>404 - Page Not Found | NotebookLM Gallery</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link
@@ -24,7 +33,7 @@
               surface: "#f7f9fb",
               primary: "#004bca",
               "on-primary": "#ffffff",
-              "text-muted": "#64748B",
+              "text-muted": "#475569",
               "border-subtle": "#E2E8F0",
             },
           },
@@ -35,11 +44,12 @@
   <body
     class="bg-surface text-text-main font-body-md flex items-center justify-center min-h-screen p-4"
   >
-    <div class="text-center max-w-md">
+    <a href="#main-content" class="skip-link">Skip to main content</a>
+    <main id="main-content" class="text-center max-w-md">
       <div
         class="w-20 h-20 bg-primary-fixed rounded-full flex items-center justify-center mx-auto mb-6"
       >
-        <span class="material-symbols-outlined text-4xl text-primary"
+        <span class="material-symbols-outlined text-4xl text-primary" aria-hidden="true"
           >search_off</span
         >
       </div>
@@ -54,9 +64,9 @@
         class="inline-flex items-center gap-2 bg-primary text-on-primary font-label-md text-label-md px-6 py-3 rounded-lg hover:shadow-lg transition-all"
         href="/"
       >
-        <span class="material-symbols-outlined">arrow_back</span>
+        <span class="material-symbols-outlined" aria-hidden="true">arrow_back</span>
         Back to Discover
       </a>
-    </div>
+    </main>
   </body>
 </html>

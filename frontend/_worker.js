@@ -567,6 +567,75 @@ async function handleImage(_req, env, m) {
 	return new Response(obj.body, { headers });
 }
 
+// === SEO Handlers ===
+
+const SEO_SITE_URL = "https://notebooklm.gallery";
+
+async function handleSitemap(request, env, ctx) {
+	// Try cache first
+	if (env.SITEMAP_CACHE) {
+		try {
+			const cached = await env.SITEMAP_CACHE.get("sitemap.xml");
+			if (cached) {
+				return new Response(cached, {
+					headers: { "Content-Type": "application/xml" },
+				});
+			}
+		} catch {
+			// Cache miss or error, continue to generate
+		}
+	}
+
+	// Query all notebooks
+	let notebooks;
+	try {
+		const result = await env.DB.prepare(
+			"SELECT id, created_at FROM notebooks ORDER BY created_at DESC",
+		).all();
+		notebooks = result.results || [];
+	} catch (err) {
+		console.error("Sitemap DB error:", err);
+		notebooks = [];
+	}
+
+	const now = new Date().toISOString();
+
+	// Build XML
+	const urls = [
+		`  <url>\n    <loc>${SEO_SITE_URL}/</loc>\n    <lastmod>${now}</lastmod>\n    <changefreq>daily</changefreq>\n    <priority>1.0</priority>\n  </url>`,
+		`  <url>\n    <loc>${SEO_SITE_URL}/submit</loc>\n    <lastmod>${now}</lastmod>\n    <changefreq>weekly</changefreq>\n    <priority>0.5</priority>\n  </url>`,
+	];
+
+	for (const nb of notebooks) {
+		const lastmod = nb.created_at
+			? new Date(nb.created_at).toISOString()
+			: now;
+		urls.push(`  <url>\n    <loc>${SEO_SITE_URL}/notebook/${nb.id}</loc>\n    <lastmod>${lastmod}</lastmod>\n    <changefreq>weekly</changefreq>\n    <priority>0.8</priority>\n  </url>`);
+	}
+
+	const xml = `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${urls.join("\n")}\n</urlset>`;
+
+	// Cache in background if KV available
+	if (env.SITEMAP_CACHE) {
+		ctx.waitUntil(env.SITEMAP_CACHE.put("sitemap.xml", xml));
+	}
+
+	return new Response(xml, {
+		headers: { "Content-Type": "application/xml" },
+	});
+}
+
+function handleRobots() {
+	const body = `User-agent: *
+Allow: /
+
+Sitemap: ${SEO_SITE_URL}/sitemap.xml
+`;
+	return new Response(body, {
+		headers: { "Content-Type": "text/plain" },
+	});
+}
+
 // === Route matching ===
 const routes = [
 	{
@@ -637,6 +706,14 @@ async function handleRequest(request, env, _ctx) {
 			}
 		}
 		return res;
+	}
+
+	// SEO routes — handled before the /api/ gate since they live at root
+	if (url.pathname === "/sitemap.xml") {
+		return handleSitemap(request, env, _ctx);
+	}
+	if (url.pathname === "/robots.txt") {
+		return handleRobots();
 	}
 
 	// Only handle /api/* — fall through to ASSETS for everything else
