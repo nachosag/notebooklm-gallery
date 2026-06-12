@@ -452,6 +452,102 @@ async function handleSubmit(request, env) {
 	}
 }
 
+async function handleUpdateImage(request, env, id) {
+	try {
+		// Check notebook exists
+		const existing = await env.DB.prepare(
+			"SELECT id FROM notebooks WHERE id = ?1",
+		)
+			.bind(id)
+			.first();
+		if (!existing)
+			return json(
+				{ error: { code: "NOT_FOUND", message: "Notebook not found" } },
+				404,
+			);
+
+		const jsonData = await request.json();
+
+		if (
+			!jsonData.preview_image ||
+			typeof jsonData.preview_image !== "string" ||
+			!jsonData.preview_image.startsWith("data:")
+		)
+			return json(
+				{
+					error: {
+						code: "VALIDATION_ERROR",
+						message: "preview_image must be a base64 data URL",
+					},
+				},
+				400,
+			);
+
+		const ALLOWED = new Set(["image/png", "image/jpeg", "image/webp"]);
+		const matches = jsonData.preview_image.match(
+			/^data:(image\/(png|jpeg|webp));base64,(.+)$/,
+		);
+		if (!matches)
+			return json(
+				{
+					error: { code: "VALIDATION_ERROR", message: "Invalid image format" },
+				},
+				400,
+			);
+
+		const mimeType = matches[1];
+		const ext = mimeType === "image/jpeg" ? "jpg" : mimeType.split("/")[1];
+		const base64Data = matches[3];
+
+		if (!ALLOWED.has(mimeType))
+			return json(
+				{
+					error: {
+						code: "VALIDATION_ERROR",
+						message: "Image must be PNG, JPEG, or WebP",
+					},
+				},
+				400,
+			);
+
+		const binaryStr = atob(base64Data);
+		const bytes = new Uint8Array(binaryStr.length);
+		for (let i = 0; i < binaryStr.length; i++)
+			bytes[i] = binaryStr.charCodeAt(i);
+
+		if (bytes.length > 5 * 1024 * 1024)
+			return json(
+				{
+					error: {
+						code: "VALIDATION_ERROR",
+						message: "Image must be under 5 MB",
+					},
+				},
+				400,
+			);
+
+		const key = `preview-images/${crypto.randomUUID()}.${ext}`;
+		await env.PREVIEW_IMAGES.put(key, bytes, {
+			httpMetadata: { contentType: mimeType },
+		});
+
+		const previewUrl = `/api/images/${key}`;
+		await env.DB.prepare(
+			"UPDATE notebooks SET preview_url = ?1 WHERE id = ?2",
+		)
+			.bind(previewUrl, id)
+			.run();
+
+		return json({ id, preview_url: previewUrl, success: true });
+	} catch (err) {
+		console.error("Update image error:", err);
+		return json(
+			{ error: { code: "INTERNAL_ERROR", message: "Something went wrong" } },
+			500,
+		);
+	}
+}
+
 async function handleLike(request, env, id) {
 	try {
 		const ipHash = await hashIp(
@@ -588,6 +684,11 @@ const routes = [
 		method: "POST",
 		pattern: /^\/api\/notebooks\/([a-f0-9-]+)\/like$/,
 		handler: async (req, env, m) => handleLike(req, env, m[1]),
+	},
+	{
+		method: "POST",
+		pattern: /^\/api\/notebooks\/([a-f0-9-]+)\/image$/,
+		handler: async (req, env, m) => handleUpdateImage(req, env, m[1]),
 	},
 	{
 		method: "GET",
