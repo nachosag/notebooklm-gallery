@@ -1,0 +1,20 @@
+name = "notebooklm-gallery-dev"
+compatibility_date = "2025-01-01"
+
+# Pages config — _worker.js es la entry point
+pages_build_output_dir = "."
+
+[[d1_databases]]
+binding = "DB"
+database_name = "notebooklm-marketplace"
+database_id = "local-dev"
+
+[[r2_buckets]]
+binding = "PREVIEW_IMAGES"
+bucket_name = "notebooklm-marketplace-previews"
+
+[[kv_namespaces]]
+binding = "SITEMAP_CACHE"
+id = "local-dev"
+
+# Turnstile se saltea en local (el _worker.js bypassa si no existe la env var)

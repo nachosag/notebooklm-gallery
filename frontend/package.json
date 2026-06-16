@@ -1,0 +1,11 @@
+{
+  "name": "notebooklm-gallery-frontend",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "dev": "wrangler pages dev ."
+  },
+  "devDependencies": {
+    "wrangler": "^4.101.0"
+  }
+}
