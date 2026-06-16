@@ -291,7 +291,84 @@ async function toggleLike(notebookId, element) {
 	}
 }
 
+function getActiveSortFromUrl() {
+	const params = new URLSearchParams(window.location.search);
+	const sortParam = params.get("sort");
+	// No sort param → Discover (default view)
+	if (!sortParam) return "discover";
+	// Explicit sort=recent → Recent tab
+	if (sortParam === "recent") return "recent";
+	// sort=popular → Trending tab
+	if (sortParam === "popular") return "popular";
+	return "discover";
+}
+
+function readUrlParams() {
+	const params = new URLSearchParams(window.location.search);
+
+	const sortParam = params.get("sort");
+	if (sortParam === "popular") {
+		state.sort = "popular";
+	} else if (sortParam === "recent") {
+		state.sort = "recent";
+	} else {
+		state.sort = "recent"; // default
+	}
+
+	const cat = params.get("category");
+	if (cat && cat !== "all") state.category = cat;
+
+	const tag = params.get("tag");
+	if (tag) state.tag = tag;
+
+	const search = params.get("search");
+	if (search) state.search = search;
+}
+
+function updateNavbarActiveTab() {
+	const activeSort = getActiveSortFromUrl();
+	const links = document.querySelectorAll("[data-sort]");
+
+	links.forEach((link) => {
+		const sort = link.dataset.sort;
+		const isDesktop = link.closest(".md\\:flex") !== null;
+		const isActive = sort === activeSort;
+
+		if (isDesktop) {
+			// Desktop nav: border-bottom indicator
+			if (isActive) {
+				link.classList.add(
+					"text-primary",
+					"font-bold",
+					"border-b-2",
+					"border-primary",
+				);
+				link.classList.remove("text-text-muted", "hover:text-primary");
+			} else {
+				link.classList.remove(
+					"text-primary",
+					"font-bold",
+					"border-b-2",
+					"border-primary",
+				);
+				link.classList.add("text-text-muted", "hover:text-primary");
+			}
+		} else {
+			// Mobile nav: bold + primary color
+			if (isActive) {
+				link.classList.add("text-primary", "font-bold");
+				link.classList.remove("text-text-muted", "hover:text-primary");
+			} else {
+				link.classList.remove("text-primary", "font-bold");
+				link.classList.add("text-text-muted", "hover:text-primary");
+			}
+		}
+	});
+}
+
 function init() {
+	readUrlParams();
+	updateNavbarActiveTab();
 	setupSearch();
 	setupCategoryFilter();
 	setupPagination();
