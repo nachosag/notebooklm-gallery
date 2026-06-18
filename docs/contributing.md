@@ -316,6 +316,50 @@ npx prettier --write workers/api/src/
 - **Responsive design**: Test on different devices
 - **Accessibility**: Test with screen readers
 
+## Project Management
+
+### GitHub Projects
+
+Este proyecto usa **GitHub Projects** (kanban) para trackear todo el trabajo: features, bugs, deudas técnicas, tareas de infraestructura, etc.
+
+**Tablero:** https://github.com/users/nachosag/projects/3
+
+#### Flujo de trabajo en el Project
+
+| Columna | Cuándo se usa |
+|---------|---------------|
+| `Backlog` | Ideas, tareas sin priorizar, backlog largo |
+| `To Do` | Tareas listas para empezar, priorizadas |
+| `In Progress` | Alguien está trabajando activamente |
+| `Done` | Completado, merged o cerrado |
+
+#### Issues y etiquetas
+
+- Cada pieza de trabajo tiene su **issue** en el repo
+- Etiquetas estándar:
+  - `deuda técnica` — refactors, duplicación, tech debt
+  - `arquitectura` — decisiones de arquitectura
+  - `infraestructura` — CI/CD, tooling, config
+  - `setup` — tareas de setup inicial
+  - `bug` — errores en producción
+  - `feature` — nueva funcionalidad
+  - `docs` — documentación
+
+#### Convención de commits y PRs
+
+- Usar **conventional commits** (ya documentado arriba)
+- En el mensaje del commit o PR, referenciar el issue:
+  - `fixes #4` → cierra el issue #4 al mergear
+  - `refs #5` → referencia el issue #5 sin cerrarlo
+
+#### Pull Requests
+
+- Cada PR debe referenciar al menos un issue (`fixes #4` o `refs #5`)
+- El Project mueve automáticamente el issue a `In Progress` cuando se abre un PR vinculado
+- Al mergear, el issue se mueve a `Done`
+
+---
+
 ## Community Guidelines
 
 ### Code of Conduct
