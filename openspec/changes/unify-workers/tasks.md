@@ -41,10 +41,10 @@ Chain strategy: stacked-to-main
 
 ## Phase 5: Pin drifts #2/#5/#6/#7 (PR 5, GREEN-only — no code change)
 
-- [ ] 5.1 `workers/api/test/unit/ip.test.js` — assert `hashIp("x")` = SHA-256 of `"x"` (no salt)
-- [ ] 5.2 `workers/api/test/integration/submit.test.js` — assert R2 `put()` failure → 201 without `preview_url`
-- [ ] 5.3 `workers/api/test/integration/notebooks.test.js` — assert category filter with D1 `||` concat
-- [ ] 5.4 Verify: `npm test` passes (all green against current code)
+- [x] 5.1 `workers/api/test/unit/ip.test.js` — assert `hashIp("x")` = SHA-256 of `"x"` (no salt)
+- [x] 5.2 `workers/api/test/integration/submit.test.js` — assert R2 `put()` failure → 201 without `preview_url`
+- [x] 5.3 `workers/api/test/integration/notebooks.test.js` — assert category filter with D1 `||` concat
+- [x] 5.4 Verify: `npm test` passes (71/71, all green against current code)
 
 ## Phase 6: `_redirects` + strip notebook block (PR 6)
 
