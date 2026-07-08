@@ -17,4 +17,12 @@ bucket_name = "notebooklm-marketplace-previews"
 binding = "SITEMAP_CACHE"
 id = "local-dev"
 
+# Service binding to the tested API Worker (deployed from workers/api/ as
+# "notebooklm-gallery-api"). env.API.fetch() is used by the thin _worker.js
+# proxy for /api/*, /sitemap.xml, /robots.txt. For local dev, run the API
+# Worker separately (wrangler dev in workers/api/) or use a remote proxy.
+[[services]]
+binding = "API"
+service = "notebooklm-gallery-api"
+
 # Turnstile se saltea en local (el _worker.js bypassa si no existe la env var)
