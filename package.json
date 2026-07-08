@@ -1,0 +1,8 @@
+{
+  "private": true,
+  "name": "notebooklm-gallery",
+  "scripts": {
+    "dev": "pnpm -r --parallel run dev",
+    "deploy": "pnpm --filter notebooklm-gallery-api run deploy"
+  }
+}

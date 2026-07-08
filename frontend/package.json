@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
-    "dev": "wrangler pages dev ."
+    "dev": "wrangler pages dev . --inspector-port 9230"
   },
   "devDependencies": {
     "wrangler": "^4.101.0"

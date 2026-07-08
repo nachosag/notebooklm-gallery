@@ -14,14 +14,15 @@ jobs:
         working-directory: workers/api
     steps:
       - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
       - uses: actions/setup-node@v4
         with:
           node-version: 22
-          cache: npm
-          cache-dependency-path: workers/api/package-lock.json
-      - run: npm ci
+          cache: pnpm
+          cache-dependency-path: pnpm-lock.yaml
+      - run: pnpm install --frozen-lockfile
       - name: Worker wrangler deploy --dry-run
-        run: npx wrangler deploy --dry-run
+        run: pnpm exec wrangler deploy --dry-run
 
   deploy-worker:
     name: Deploy API Worker (production)
@@ -32,18 +33,19 @@ jobs:
         working-directory: workers/api
     steps:
       - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
       - uses: actions/setup-node@v4
         with:
           node-version: 22
-          cache: npm
-          cache-dependency-path: workers/api/package-lock.json
-      - run: npm ci
+          cache: pnpm
+          cache-dependency-path: pnpm-lock.yaml
+      - run: pnpm install --frozen-lockfile
       # TURNSTILE_SECRET is set out-of-band via
       # `wrangler secret put TURNSTILE_SECRET` and is
       # NOT passed through CI. Order matters: deploy the Worker FIRST, then
       # Pages so the service binding resolves the moment the thin proxy goes live.
       - name: Deploy Worker
-        run: npx wrangler deploy
+        run: pnpm exec wrangler deploy
         env:
           CLOUDFLARE_API_TOKEN: ${{ secrets.CF_API_TOKEN }}
           CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CF_ACCOUNT_ID }}
