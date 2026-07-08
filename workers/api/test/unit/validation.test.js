@@ -169,10 +169,17 @@ describe("validateNotebook", () => {
   });
 
   describe("categories", () => {
-    it("rejects empty array", () => {
+    it("accepts empty array (0 categories allowed)", () => {
       const result = validateNotebook({ ...VALID_DATA, categories: [] });
-      expect(result.valid).toBe(false);
-      expect(result.errors.categories).toBeDefined();
+      expect(result.valid).toBe(true);
+      expect(result.errors).toBeNull();
+    });
+
+    it("accepts absent categories (optional field)", () => {
+      const { categories, ...data } = VALID_DATA;
+      const result = validateNotebook(data);
+      expect(result.valid).toBe(true);
+      expect(result.errors).toBeNull();
     });
 
     it("rejects more than 3 categories", () => {
@@ -202,11 +209,11 @@ describe("validateNotebook", () => {
       expect(result.errors.categories).toBeDefined();
     });
 
-    it("rejects missing categories", () => {
+    it("accepts missing categories (optional field, lenient)", () => {
       const { categories, ...data } = VALID_DATA;
       const result = validateNotebook(data);
-      expect(result.valid).toBe(false);
-      expect(result.errors.categories).toBeDefined();
+      expect(result.valid).toBe(true);
+      expect(result.errors).toBeNull();
     });
 
     it("accepts exactly 1 category", () => {
