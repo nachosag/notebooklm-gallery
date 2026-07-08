@@ -34,10 +34,10 @@ Chain strategy: stacked-to-main
 
 ## Phase 4: Validation lenient categories — drift #4 (PR 4, RED→GREEN)
 
-- [ ] 4.1 **RED**: Add test in `workers/api/test/unit/validation.test.js` — absent `categories` passes. Run: FAILS.
-- [ ] 4.2 **GREEN**: `workers/api/src/utils/validation.js` L51-57 — allow 0+ categories, max 3, each must be valid slug
-- [ ] 4.3 Update 2 existing tests: "rejects empty array" and "rejects missing categories" → assert they PASS
-- [ ] 4.4 Verify: `npm test` passes; 0-3 cats valid, 4+ rejected
+- [x] 4.1 **RED**: Add test in `workers/api/test/unit/validation.test.js` — absent `categories` passes. Run: FAILS.
+- [x] 4.2 **GREEN**: `workers/api/src/utils/validation.js` L51-57 — allow 0+ categories, max 3, each must be valid slug
+- [x] 4.3 Update 2 existing tests: "rejects empty array" and "rejects missing categories" → assert they PASS
+- [x] 4.4 Verify: `npm test` passes (67/67); 0-3 cats valid, 4+ rejected
 
 ## Phase 5: Pin drifts #2/#5/#6/#7 (PR 5, GREEN-only — no code change)
 
