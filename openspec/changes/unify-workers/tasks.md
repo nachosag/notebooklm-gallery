@@ -54,7 +54,7 @@ Chain strategy: stacked-to-main
 
 ## Phase 7: Cutover — thin proxy + service binding (PR 7)
 
-- [ ] 7.1 Add `[[services]]` to `frontend/wrangler.toml`: `binding = "API"`, `service = "notebooklm-gallery-api"`
-- [ ] 7.2 Reduce `frontend/_worker.js` to ~15-line proxy: `/api/*`, `/sitemap.xml`, `/robots.txt` → `env.API.fetch()`; rest → `env.ASSETS.fetch()`
-- [ ] 7.3 Add `wrangler deploy --env production` to CI before Pages deploy
-- [ ] 7.4 Verify: dry-run exits 0 for both; live `curl` 3 routes + SPA → 200
+- [x] 7.1 Add `[[services]]` to `frontend/wrangler.toml`: `binding = "API"`, `service = "notebooklm-gallery-api"`
+- [x] 7.2 Reduce `frontend/_worker.js` to ~15-line proxy: `/api/*`, `/sitemap.xml`, `/robots.txt` → `env.API.fetch()`; rest → `env.ASSETS.fetch()`
+- [x] 7.3 Add `wrangler deploy --env production` to CI before Pages deploy
+- [x] 7.4 Verify: Worker `wrangler deploy --dry-run --env production` exits 0 (3 bindings). Pages dry-run + live `curl` 3 routes + SPA → 200 deferred to maintainer (no real deploy; `wrangler pages dev` headless not exercisable here).
