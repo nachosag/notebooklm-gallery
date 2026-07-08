@@ -1,6 +1,6 @@
 name = "notebooklm-gallery-api"
 main = "src/index.js"
-compatibility_date = "2025-01-01"
+compatibility_date = "2026-07-01"
 account_id = "18dc6f95f068dd5cfa95520d3f08760a"
 workers_dev = true
 
