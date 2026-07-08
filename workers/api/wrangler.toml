@@ -16,6 +16,7 @@ binding = "SITEMAP_CACHE"
 id = "f6c20286deed48d3bf2aac6ae2cdbc17"
 
 [env.production]
+workers_dev = true
 vars = { ENVIRONMENT = "production", R2_PUBLIC_URL = "" }
 account_id = "18dc6f95f068dd5cfa95520d3f08760a"
 
