@@ -16,9 +16,9 @@ Chain strategy: stacked-to-main
 
 ## Phase 1: Foundation — vitest KV + CI (PR 1, no behavior change)
 
-- [ ] 1.1 Add `kvNamespaces: { SITEMAP_CACHE: "test-cache" }` to `workers/api/vitest.config.mjs`
-- [ ] 1.2 Add Worker `wrangler deploy --dry-run` job to `.github/workflows/deploy.yml`
-- [ ] 1.3 Verify: dry-run exits 0, shows 3 bindings
+- [x] 1.1 Add `kvNamespaces: { SITEMAP_CACHE: "test-cache" }` to `workers/api/vitest.config.mjs` (also pinned `miniflare.compatibilityDate` to unblock workerd)
+- [x] 1.2 Add Worker `wrangler deploy --dry-run` job to `.github/workflows/deploy.yml`
+- [x] 1.3 Verify: dry-run exits 0, shows 3 bindings (SITEMAP_CACHE, DB, PREVIEW_IMAGES)
 
 ## Phase 2: Fix SITE_URL — bug #166 (PR 2, RED→GREEN)
 
