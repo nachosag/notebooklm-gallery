@@ -688,26 +688,6 @@ function matchRoute(method, pathname) {
 async function handleRequest(request, env, _ctx) {
 	const url = new URL(request.url);
 
-	// Serve notebook.html for /notebook/* (client-side routing loads detail from API)
-	if (url.pathname.startsWith("/notebook/")) {
-		// ASSETS redirects /notebook.html → /notebook, so we follow the redirect
-		const res = await env.ASSETS.fetch(
-			new Request(new URL("/notebook.html", request.url)),
-		);
-		if (
-			res.status === 301 ||
-			res.status === 302 ||
-			res.status === 307 ||
-			res.status === 308
-		) {
-			const location = res.headers.get("location");
-			if (location) {
-				return env.ASSETS.fetch(new Request(new URL(location, request.url)));
-			}
-		}
-		return res;
-	}
-
 	// SEO routes — handled before the /api/ gate since they live at root
 	if (url.pathname === "/sitemap.xml") {
 		return handleSitemap(request, env, _ctx);
@@ -716,7 +696,10 @@ async function handleRequest(request, env, _ctx) {
 		return handleRobots();
 	}
 
-	// Only handle /api/* — fall through to ASSETS for everything else
+	// Only handle /api/* — fall through to ASSETS for everything else.
+	// /notebook/* is no longer special-cased here: the static _redirects rule
+	// serves /notebook.html (status 200) at the assets layer so the URL is
+	// preserved for client-side routing.
 	if (!url.pathname.startsWith("/api/")) {
 		return env.ASSETS.fetch(request);
 	}
