@@ -1,6 +1,10 @@
 name = "notebooklm-gallery-api"
 main = "src/index.js"
 compatibility_date = "2025-01-01"
+account_id = "18dc6f95f068dd5cfa95520d3f08760a"
+workers_dev = true
+
+vars = { ENVIRONMENT = "production", R2_PUBLIC_URL = "" }
 
 [[d1_databases]]
 binding = "DB"
@@ -12,23 +16,5 @@ binding = "PREVIEW_IMAGES"
 bucket_name = "notebooklm-marketplace-previews"
 
 [[kv_namespaces]]
-binding = "SITEMAP_CACHE"
-id = "f6c20286deed48d3bf2aac6ae2cdbc17"
-
-[env.production]
-workers_dev = true
-vars = { ENVIRONMENT = "production", R2_PUBLIC_URL = "" }
-account_id = "18dc6f95f068dd5cfa95520d3f08760a"
-
-[[env.production.d1_databases]]
-binding = "DB"
-database_name = "notebooklm-marketplace"
-database_id = "045bb108-427e-44a6-bbd8-4e0e8341bdd4"
-
-[[env.production.r2_buckets]]
-binding = "PREVIEW_IMAGES"
-bucket_name = "notebooklm-marketplace-previews"
-
-[[env.production.kv_namespaces]]
 binding = "SITEMAP_CACHE"
 id = "f6c20286deed48d3bf2aac6ae2cdbc17"
