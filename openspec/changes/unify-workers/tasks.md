@@ -28,9 +28,9 @@ Chain strategy: stacked-to-main
 
 ## Phase 3: Like rate limit 30/h — drift #3 (PR 3, RED→GREEN)
 
-- [ ] 3.1 **RED**: Add test in `workers/api/test/integration/ratelimit.test.js` — 429 at 30 like actions/hour. Run: FAILS.
-- [ ] 3.2 **GREEN**: `workers/api/src/handlers/likes.js` L7 → `RATE_LIMIT_MAX = 30`
-- [ ] 3.3 Verify: `npm test` passes
+- [x] 3.1 **RED**: Add test in `workers/api/test/integration/ratelimit.test.js` — 429 at 30 like actions/hour. Run: FAILS.
+- [x] 3.2 **GREEN**: `workers/api/src/handlers/likes.js` L7 → `RATE_LIMIT_MAX = 30`
+- [x] 3.3 Verify: `npm test` passes (66/66)
 
 ## Phase 4: Validation lenient categories — drift #4 (PR 4, RED→GREEN)
 
