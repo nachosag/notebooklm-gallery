@@ -22,9 +22,9 @@ Chain strategy: stacked-to-main
 
 ## Phase 2: Fix SITE_URL — bug #166 (PR 2, RED→GREEN)
 
-- [ ] 2.1 **RED**: Create `workers/api/test/integration/seo.test.js` — every `<loc>` starts with `https://notebooklm-gallery.pages.dev/`; none contains `notebooklm.gallery`. Run: FAILS.
-- [ ] 2.2 **GREEN**: `workers/api/src/handlers/seo.js` L5 → `SITE_URL = "https://notebooklm-gallery.pages.dev"`
-- [ ] 2.3 Verify: `npm test` passes
+- [x] 2.1 **RED**: Create `workers/api/test/integration/seo.test.js` — every `<loc>` starts with `https://notebooklm-gallery.pages.dev/`; none contains `notebooklm.gallery`. Run: FAILS.
+- [x] 2.2 **GREEN**: `workers/api/src/handlers/seo.js` L5 → `SITE_URL = "https://notebooklm-gallery.pages.dev"`
+- [x] 2.3 Verify: `npm test` passes (64/64)
 
 ## Phase 3: Like rate limit 30/h — drift #3 (PR 3, RED→GREEN)
 
