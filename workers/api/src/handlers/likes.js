@@ -4,7 +4,7 @@
 
 import { hashIp } from "../utils/ip.js";
 
-const RATE_LIMIT_MAX = 100; // actions per hour per IP
+const RATE_LIMIT_MAX = 30; // actions per hour per IP (matches production, drift #3)
 const RATE_LIMIT_WINDOW_SEC = 3600;
 
 export async function handleLike(request, env, id) {
