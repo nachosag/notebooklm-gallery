@@ -48,12 +48,16 @@ export function validateNotebook(data) {
 			"Must be a valid NotebookLM link (notebooklm.google.com)";
 	}
 
-	if (!data.categories || !Array.isArray(data.categories)) {
-		errors.categories = "Select 1-3 categories from the list";
-	} else if (data.categories.length < 1 || data.categories.length > 3) {
-		errors.categories = "Select 1-3 categories from the list";
-	} else if (!data.categories.every((c) => VALID_CATEGORIES.includes(c))) {
-		errors.categories = "One or more invalid categories";
+	// Categories are optional: absent is valid (lenient, drift #4).
+	// When present: must be an array, at most 3 items, each a valid slug.
+	if (data.categories !== undefined) {
+		if (!Array.isArray(data.categories)) {
+			errors.categories = "Categories must be an array of slugs";
+		} else if (data.categories.length > 3) {
+			errors.categories = "Select at most 3 categories";
+		} else if (!data.categories.every((c) => VALID_CATEGORIES.includes(c))) {
+			errors.categories = "One or more invalid categories";
+		}
 	}
 
 	if (data.tags) {

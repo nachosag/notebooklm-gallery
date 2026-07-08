@@ -2,7 +2,7 @@
  * SEO handlers: sitemap.xml and robots.txt
  */
 
-const SITE_URL = "https://notebooklm.gallery";
+const SITE_URL = "https://notebooklm-gallery.pages.dev";
 
 /**
  * GET /sitemap.xml — Generate XML sitemap with all notebook URLs.

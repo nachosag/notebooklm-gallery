@@ -161,6 +161,43 @@ describe("POST /api/notebooks — integration", () => {
     expect(body.error.code).toBe("RATE_LIMITED");
   });
 
+  // Drift #6 pin: an R2 put() failure must be NON-FATAL. The submission
+  // still returns 201, and the notebook is stored with preview_url = NULL
+  // (logged, not failed). Validation errors (bad type/size) still 400.
+  it("succeeds with 201 and no preview_url when R2 put() throws — drift #6", async () => {
+    const originalPut = env.PREVIEW_IMAGES.put.bind(env.PREVIEW_IMAGES);
+    // Force R2 put() to reject on the next call(s) for this test only.
+    env.PREVIEW_IMAGES.put = async () => {
+      throw new Error("R2 unavailable");
+    };
+    try {
+      const base64 =
+        "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8/5+hHgAHggJ/PchI7wAAAABJRU5ErkJggg==";
+      const res = await post(
+        {
+          ...VALID,
+          preview_image: base64,
+          share_url:
+            "https://notebooklm.google.com/notebook/r2-failure-pin",
+        },
+        // unique IP to keep this test isolated from rate-limit state
+        { "CF-Connecting-IP": "10.77.0.77" },
+      );
+      expect(res.status).toBe(201);
+      const body = await res.json();
+      expect(body.success).toBe(true);
+      // The notebook row MUST be stored with NO preview_url.
+      const row = await env.DB.prepare(
+        "SELECT preview_url FROM notebooks WHERE id = ?1",
+      )
+        .bind(body.id)
+        .first();
+      expect(row?.preview_url).toBeNull();
+    } finally {
+      env.PREVIEW_IMAGES.put = originalPut;
+    }
+  });
+
   it("handles base64 image correctly", async () => {
     // 1x1 red PNG in base64
     const base64 =
