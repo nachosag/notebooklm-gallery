@@ -25,4 +25,21 @@ describe("hashIp", () => {
     expect(hash).toHaveLength(64);
     expect(hash).toMatch(/^[0-9a-f]{64}$/);
   });
+
+  // Drift #2 pin: the tested implementation hashes the BARE IP (no salt),
+  // i.e. hashIp(x) === sha256(x). The production _worker.js salts with
+  // "notebooklm-gallery-salt"; this test locks the tested winner in place.
+  it("equals the bare SHA-256 of the input (no salt) — drift #2", async () => {
+    // sha256("x") computed independently:
+    //   2d711642b726b04401627ca9fbac32f5c8530fb1903cc4db02258717921a4881
+    const expected = "2d711642b726b04401627ca9fbac32f5c8530fb1903cc4db02258717921a4881";
+    const result = await hashIp("x");
+    expect(result).toBe(expected);
+    // Triangulate: confirm it is NOT the salted variant production uses.
+    const { createHash } = await import("node:crypto");
+    const salted = createHash("sha256")
+      .update("x" + "notebooklm-gallery-salt")
+      .digest("hex");
+    expect(result).not.toBe(salted);
+  });
 });
