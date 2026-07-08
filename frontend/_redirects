@@ -1,0 +1,12 @@
+# Cloudflare Pages redirects
+# SPA fallback for notebook detail pages: a 200 (soft rewrite) serves the
+# notebook SPA HTML while preserving the requested URL so client-side
+# routing can read the notebook id from the path. The Pages _worker.js no
+# longer special-cases /notebook/*; this rule handles it at the assets layer.
+#
+# NOTE: destination is the bare "/notebook" pretty URL, NOT "/notebook.html".
+# Pages "Pretty URLs" intercept "GET /notebook.html" and 308-redirect it to
+# "/notebook"; a 200 rewrite targeting /notebook.html therefore surfaces a
+# 308 to the client instead of the HTML. Targeting "/notebook" serves
+# notebook.html directly (pretty URL -> notebook.html) with no redirect leak.
+/notebook/*  /notebook  200

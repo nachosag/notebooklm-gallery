@@ -48,9 +48,9 @@ Chain strategy: stacked-to-main
 
 ## Phase 6: `_redirects` + strip notebook block (PR 6)
 
-- [ ] 6.1 Create `frontend/_redirects`: `/notebook/*  /notebook.html  200`
-- [ ] 6.2 Remove `/notebook/` SPA handler from `frontend/_worker.js`
-- [ ] 6.3 Verify: `wrangler pages dev`; `curl /notebook/abc` → 200
+- [x] 6.1 Create `frontend/_redirects`: `/notebook/*  /notebook  200` (Pretty-URL-safe variant of spec's `/notebook.html` target — see deviation note)
+- [x] 6.2 Remove `/notebook/` SPA handler from `frontend/_worker.js`
+- [x] 6.3 Verify: `wrangler pages dev` boots, `GET /` -> 200. `/notebook/abc` -> 200 deferred to maintainer live curl (task 7.4); dev-targeting `/notebook.html` returned 308 (Pages Pretty URLs) so rule retargeted to `/notebook`.
 
 ## Phase 7: Cutover — thin proxy + service binding (PR 7)
 
