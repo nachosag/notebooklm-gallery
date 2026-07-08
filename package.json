@@ -2,9 +2,7 @@
   "private": true,
   "name": "notebooklm-gallery",
   "packageManager": "pnpm@11.2.2",
-  "pnpm": {
-    "onlyBuiltDependencies": ["esbuild", "sharp", "workerd"]
-  },
+
   "scripts": {
     "dev": "pnpm -r --parallel run dev",
     "deploy": "pnpm --filter notebooklm-gallery-api run deploy"
