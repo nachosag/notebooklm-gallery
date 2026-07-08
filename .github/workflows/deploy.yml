@@ -5,9 +5,27 @@ on:
     branches: [main]
 
 jobs:
+  worker-validate:
+    name: Validate Worker (dry-run)
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: workers/api
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+          cache-dependency-path: workers/api/package-lock.json
+      - run: npm ci
+      - name: Worker wrangler deploy --dry-run
+        run: npx wrangler deploy --dry-run --env production
+
   deploy:
     name: Deploy to Cloudflare Pages
     runs-on: ubuntu-latest
+    needs: worker-validate
     steps:
       - uses: actions/checkout@v4
       - name: Deploy to Cloudflare Pages
