@@ -10,9 +10,7 @@
     "test": "vitest run",
     "test:watch": "vitest"
   },
-  "dependencies": {
-    "itty-router": "^5.0.18"
-  },
+  "dependencies": {},
   "devDependencies": {
     "@cloudflare/vitest-pool-workers": "^0.16.15",
     "vitest": "^4.1.8",
