@@ -5,6 +5,8 @@
 
   "scripts": {
     "dev": "pnpm -r --parallel run dev",
-    "deploy": "pnpm --filter notebooklm-gallery-api run deploy"
+    "deploy:backend": "pnpm --filter notebooklm-gallery-api run deploy",
+    "deploy:frontend": "wrangler pages deploy frontend/ --project-name=notebooklm-gallery",
+    "deploy": "pnpm run deploy:backend && pnpm run deploy:frontend"
   }
 }
